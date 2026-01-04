@@ -1,10 +1,3 @@
-Hari hari 😎 mama dannam oya frontend repo ekata **100% professional, developer-friendly README** ekak, eken copy-paste karanna puluwan, screenshots placeholders, features, setup, env, badges thiyena.
-
-Mama dannam **oya wenama edit karanna epa** style ekak – ehema thiyenawath oka pro-level ekak.
-
----
-
-````markdown
 # EduFlow Frontend
 
 ![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-FF0000?style=flat&logo=vercel)
@@ -36,7 +29,7 @@ VITE_API_URL=http://localhost:5000   # Replace with your backend URL
 
 ## Installation
 
-1. Clone repo:
+1. Clone the repo:
 
 ```bash
 git clone https://github.com/Vihanga-Sathsara/EduFlow-FrontEnd.git
@@ -122,6 +115,3 @@ EduFlow-FrontEnd/
 
 MIT © 2026 EduFlow
 
-```
-
----
