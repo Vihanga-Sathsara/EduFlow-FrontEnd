@@ -1,73 +1,127 @@
-# React + TypeScript + Vite
+Hari hari 😎 mama dannam oya frontend repo ekata **100% professional, developer-friendly README** ekak, eken copy-paste karanna puluwan, screenshots placeholders, features, setup, env, badges thiyena.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Mama dannam **oya wenama edit karanna epa** style ekak – ehema thiyenawath oka pro-level ekak.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+````markdown
+# EduFlow Frontend
 
-## React Compiler
+![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-FF0000?style=flat&logo=vercel)
+![Node.js](https://img.shields.io/badge/Node.js-v18.17.1-brightgreen)
+![License](https://img.shields.io/badge/License-MIT-blue)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+EduFlow Frontend is built with **React + Vite + TypeScript**, providing a smooth interface for users and admins to interact with EduFlow LearnHub.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Live Demo
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Frontend deployed on **Vercel**:  
+[https://your-frontend-url.vercel.app](https://your-frontend-url.vercel.app)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Environment Variables
+
+Create a `.env` file in the root:
+
+```env
+VITE_API_URL=http://localhost:5000   # Replace with your backend URL
+````
+
+> On Vercel, add the same variable in Project Settings → Environment Variables.
+
+---
+
+## Installation
+
+1. Clone repo:
+
+```bash
+git clone https://github.com/Vihanga-Sathsara/EduFlow-FrontEnd.git
+cd EduFlow-FrontEnd
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Install dependencies:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
+
+3. Start development server:
+
+```bash
+npm run dev
+```
+
+4. Open browser:
+
+```
+http://localhost:5173
+```
+
+5. Build for production:
+
+```bash
+npm run build
+```
+
+---
+
+## Features
+
+* Responsive **dashboard** for Admin & Users
+* **Ebook upload** (Admin) and download (Users)
+* Display **recently uploaded ebooks**
+* **User management** view with roles and registration info
+* **Learning paths** overview
+* Drag & Drop file upload
+* SweetAlert2 notifications
+
+---
+
+## Folder Structure
+
+```
+EduFlow-FrontEnd/
+├─ src/
+│  ├─ components/   # Reusable UI components
+│  ├─ pages/        # React pages
+│  ├─ services/     # API calls
+│  └─ context/      # Auth & state management
+├─ public/
+├─ package.json
+├─ tsconfig.json
+└─ .env             # Not committed
+```
+
+---
+
+## Screenshots
+
+> Replace with actual screenshots in `screenshots/` folder
+
+![Dashboard](screenshots/dashboard.png)
+![Ebook Upload](screenshots/ebook-upload.png)
+![Learning Paths](screenshots/learning-paths.png)
+
+---
+
+## Notes
+
+* Frontend interacts with backend via `VITE_API_URL`
+* `.env` should **never** be committed
+* Only Admins can upload ebooks
+* Users can view/download ebooks
+* Fully responsive UI
+
+---
+
+## License
+
+MIT © 2026 EduFlow
+
+```
+
+---
