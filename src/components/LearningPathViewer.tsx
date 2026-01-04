@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { FaBars, FaBook, FaChevronDown, FaChevronUp, FaRegQuestionCircle, FaTimes } from "react-icons/fa"
+import { FaBook, FaChevronDown, FaChevronUp, FaRegQuestionCircle, FaTimes } from "react-icons/fa"
 import AnswersCard from "./AnswersCard";
 import { generateAnswers, generateNote } from "../services/ai";
 import Swal from "sweetalert2";
@@ -18,7 +18,7 @@ interface LearningPathViewerProps {
 const LearningPathViewer = ({selectPath, completeWeek, showOverview}: LearningPathViewerProps)  => {
     const [showContent, setShowContent] = useState<number | null>(null)
     const [showStage , setShowStage] = useState<number | null>(null)
-    const [showBurgerButton, setShowBurgerButton] = useState(false)
+    const [showBurgerButton] = useState(false)
     const [answers , setAnswers] = useState<{ question: any, answer: any }[]>([])
     const [showAnswerModal, setShowAnswerModal] = useState(false)
     const [answerLoading, setAnswerLoading] = useState(false)
