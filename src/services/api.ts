@@ -2,7 +2,7 @@ import axios, { AxiosError } from "axios"
 import { refreshTokens } from "./auth"
 
 const api = axios.create({ 
-    baseURL: "edu-flow-back-end.vercel.app/api",
+    baseURL: "https://edu-flow-back-end.vercel.app/api/v1"
 })
 
 const PUBLIC_ENDPOINT = ["/auth/register","/auth/google-register", "/auth/login", "/auth/google-login"]

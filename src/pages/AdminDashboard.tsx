@@ -1,13 +1,13 @@
 import Swal from "sweetalert2"
 import DashboardDateTime from "../components/DateTime"
-import Header from "../components/Header"
 import { useAuth } from "../context/AuthContext"
 import { FaBook, FaCloudUploadAlt, FaFileAlt, FaFilePdf, FaUsers } from "react-icons/fa"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { getAllUsers } from "../services/auth"
 import { getAllLearningPaths } from "../services/learningpath"
 import { getAllEbooks, uploadEbookFile } from "../services/econtent"
 import { saveAs } from "file-saver"
+import AdminHeader from "../components/AdminHeader"
 
 
 export default function AdminDashboard(){
@@ -21,7 +21,8 @@ export default function AdminDashboard(){
     const [ebookFile , setEbookFile] = useState<File | null>(null)
     const [ebooks , setEbooks] = useState<any[]>([])
     const categories = ["Programming", "Design", "Business", "Science", "Art", "History", "Mathematics", "Literature"]
-
+    const elibraryRef =  useRef<HTMLDivElement | null>(null)
+    const [height, setHeight] = useState<number | null>(null)
     
 
     useEffect(() => {
@@ -29,6 +30,12 @@ export default function AdminDashboard(){
         fetchAllLearningPaths()
         fetchAllEbooks()
     }, [])
+
+    useEffect(() => {
+        if (elibraryRef.current) {
+            setHeight(elibraryRef.current.clientHeight)
+        }
+    }, [elibraryRef])
 
     const fetchAllUsers = async () => {
         try {
@@ -138,7 +145,7 @@ export default function AdminDashboard(){
 
     return(
         <div className="w-full flex flex-col bg-blue-50 min-h-screen">
-            <Header />
+            <AdminHeader />
             <main className="relative flex flex-col items-center w-full mt-[100px] mb-10 gap-7">
                 <section className="w-[90%]">
                     <p className="text-black lg:text-4xl sm:text-3xl text-sm font-bold">Welcome back,<span className="pl-2">{user?.email}</span> </p>
@@ -182,11 +189,11 @@ export default function AdminDashboard(){
                         </div>
                     </div>
                 </section>
-                <section className="w-[90%]  bg-white p-5 rounded-lg shadow-md">
+                <section className="w-[90%] bg-white p-5 rounded-lg shadow-md">
                     <div className="flex justify-between">
-                            <p className="lg:text-2xl sm:text-xl text-base font-bold">E-Library Management</p>
+                        <p className="lg:text-2xl sm:text-xl text-base font-bold">E-Library Management</p>
                     </div>
-                    <div className={`w-full flex lg:flex-row sm:flex-col flex-col gap-6 mt-6 mb-6 justify-center items-center`}>
+                    <div ref={elibraryRef} className={`w-full flex lg:flex-row sm:flex-col flex-col gap-6 mt-6 mb-6 justify-center items-center`}>
                         <div className="mt-4 lg:w-[60%] sm:w-full w-full flex flex-col gap-4 bg-white p-4 rounded-lg shadow-sm items-center">
                             <div className="flex w-full gap-4">
                                 <FaCloudUploadAlt className="text-3xl text-blue-600"/>
@@ -230,13 +237,12 @@ export default function AdminDashboard(){
                             </div>
                             <button className="w-[40%] bg-blue-700 pt-2 pb-2 rounded-lg text-white font-bold" onClick={handleEbookUpload}>Upload</button>
                         </div>
-                        <div className="mt-4 lg:w-[40%] sm:w-full w-full flex flex-col gap-4 bg-white p-4 rounded-lg shadow-sm h-full">
+                        <div className="mt-4 lg:w-[40%] sm:w-full w-full flex flex-col gap-4 bg-white p-4 rounded-lg shadow-sm" style={{ height: height ? `${height}px` : 'auto' }}>
                             <p className="lg:text-xl sm:text-lg text-base font-bold text-blue-700">Recently Uploaded</p>
                             <div className="h-full overflow-y-auto max-h-[40vh]">
                                 {ebooks.slice(0,5).map((ebook, index) => (
-                                    
                                     <div key={index} className="shadow-sm rounded-lg p-4 bg-gray-100">
-                                       <div className="flex items-center gap-2 mb-2">
+                                       <div className="flex items-center gap-2 mb-2 bg-white py-4 px-5 rounded-lg">
                                             <FaFilePdf className="text-red-600 text-2xl" />
                                             <span className="font-semibold">{ebook.title}</span>
                                         </div>
