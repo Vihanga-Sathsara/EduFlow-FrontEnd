@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 
 export default function DashboardDateTime() {
   const [now, setNow] = useState(new Date())
-   const [showCalendar, setShowCalendar] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
