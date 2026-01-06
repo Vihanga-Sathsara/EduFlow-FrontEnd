@@ -13,8 +13,6 @@ setShowOverview?: (show: boolean) => void
 }
 
 
-
-
 const LearningPathCard = ({ learnDetail, cardSeeAll, setSelectedPath, setShowOverview } : LearningCardProps) => {
     
   

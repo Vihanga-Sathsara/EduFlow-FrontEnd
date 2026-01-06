@@ -19,9 +19,7 @@ export default function IndexHeader(){
     const [showCurrentPassword, setShowCurrentPassword] = useState(false)
     const [showDropdown, setShowDropdown] = useState(false)
     const [updateLoading, setUpdateLoading] = useState(false)
-   
-
-    const [hideOnScroll, setHideOnScroll] = useState(false);
+    const [hideOnScroll, setHideOnScroll] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,8 +34,8 @@ export default function IndexHeader(){
     };
 
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, [])
 
 
 
