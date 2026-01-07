@@ -25,7 +25,15 @@ export default function AdminDashboard(){
     const [height, setHeight] = useState<number | null>(null)
     const [userSearch,setUserSearch] = useState("")
     const [isTrueUser,setIsTruUser] = useState(false)
-    const [userDetails, setUserDetails] = useState<user | null>(null)
+
+
+    interface User {
+        _id: string
+        email: string
+        role: string[]
+        registeredDate: string
+    }
+    const [userDetails, setUserDetails] = useState<User | null>(null)
     
 
     useEffect(() => {
@@ -154,23 +162,23 @@ export default function AdminDashboard(){
             })
             return
         }
-        const searchUser = users.filter(user => user.email.includes(userSearch))
+        const searchUser = users.find(user:User => user.email.includes(userSearch))
         setIsTruUser(true)
         setUserDetails(searchUser[0])
         console.log(searchUser[0])
         
     }
     
-    const deleteBook = async (e: React.FormEvent<HTMLButtonElement>) =>{
+    const deleteBook = async (ebookId:string) =>{
         e.preventDefault()
         try{
-            const res = await deleteEcontent(ebooks._id)
+            const res = await deleteEcontent(ebookId)
              Swal.fire({
                 icon: "success",
                 text: res.message || "OTP verified successfully!",
                 draggable: true
             })
-            setEbooks(prev => prev.filter(book => book._id !== ebooks._id))
+            setEbooks(prev => prev.filter(book => book._id !== ebookId))
         }catch(error:any){
             console.error("Failed Ebook Delete:", error)
 
