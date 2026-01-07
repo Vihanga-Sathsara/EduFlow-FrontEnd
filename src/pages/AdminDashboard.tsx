@@ -162,7 +162,7 @@ export default function AdminDashboard(){
             })
             return
         }
-        const searchUser = users.find(user:User => user.email.includes(userSearch))
+        const searchUser = users.find((user:User )=> user.email.includes(userSearch))
         setIsTruUser(true)
         setUserDetails(searchUser[0])
         console.log(searchUser[0])
