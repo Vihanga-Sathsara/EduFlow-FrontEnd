@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { FaChevronDown, FaChevronUp } from "react-icons/fa"
 import { useAuth } from "../context/AuthContext"
 import { RiLockPasswordLine } from "react-icons/ri"
@@ -19,6 +19,23 @@ export default function IndexHeader(){
     const [showCurrentPassword, setShowCurrentPassword] = useState(false)
     const [showDropdown, setShowDropdown] = useState(false)
     const [updateLoading, setUpdateLoading] = useState(false)
+    const [hideOnScroll, setHideOnScroll] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+        const isLargeScreen = window.innerWidth >= 1024;
+        const isMediumScreen = window.innerWidth >= 768;
+
+        if (isLargeScreen || isMediumScreen) { 
+            setHideOnScroll(window.scrollY > 50);  
+        }else {
+            setHideOnScroll(false);
+        }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, [])
 
 
 
@@ -105,22 +122,40 @@ export default function IndexHeader(){
         }
     }
    
-   
+//    function handleClickOutside(event: MouseEvent) {
+//         const dropdown = document.getElementById("dropdown-menu");
+//         if (dropdown && !dropdown.contains(event.target as Node)) {
+//             setShowDropdown(false)
+//         }
+//     }
+
+//     useEffect(() => {
+//         if (showDropdown) {
+//             document.addEventListener("mousedown", handleClickOutside);
+//         } else {
+//             document.removeEventListener("mousedown", handleClickOutside);
+//         }
+//         return () => {
+//             document.removeEventListener("mousedown", handleClickOutside);
+//         }
+//     }, [showDropdown])
+
+
    
     return (
         <div className="w-full flex flex-col items-center relative">
-            <header className="inline-flex justify-between w-full h-[70px] items-center lg:pl-17 lg:pr-17 sm:pl-17 sm:pr-17 pl-7 pr-7 bg-gray-100 fixed z-10 top-0">
-                <div>
+            <header className={`inline-flex justify-between h-[70px] items-center lg:pl-17 lg:pr-17 sm:pl-17 sm:pr-17 pl-7 pr-7 fixed z-10 ${hideOnScroll ? "w-[80%] bg-gray-500/20 backdrop-blur-md rounded-4xl flex justify-center items-center top-1" : "shadow-sm w-full top-0"} transition-shadow duration-300`}>
+                <div className={`${hideOnScroll ? "hidden" : ""}`}>
                     <p className="lg:text-2xl sm:text-xl text-base font-bold text-[#4E6BFF]">EduFlow LearnHub</p>
                 </div>
-                <div className="space-x-4 text-lg sm:hidden lg:flex hidden">
+                <div className={`space-x-4 text-lg sm:hidden lg:flex hidden ${hideOnScroll ? "w-full flex items-center justify-center" : ""}`} >
                     <Link to="/user-dashboard">Dashboard</Link>
                     <Link to="/learning-path">Learning Path</Link>
                     <Link to="#">E-Library</Link>
                     <Link to="#">FAQ</Link>
                 </div>
-                <div className="space-x-4 text-lg flex items-center">
-                     <div className={`rounded-full w-[50px] h-[50px] cursor-pointer ${profileColor} items-center justify-center lg:flex sm:flex hidden`}>
+                <div className={`space-x-4 text-lg flex items-center ${hideOnScroll ? "hidden" : ""}`}>
+                     <div className={`rounded-full w-[50px] h-[50px] cursor-pointer ${profileColor} items-center justify-center lg:flex sm:flex hidden`} onClick={() => alert("Profile Clicked")}>
                         <p>{profileLetter}</p>
                      </div>
                      <button onClick={() => setShowDropdown(!showDropdown)}>{showDropdown ? <FaChevronUp /> : <FaChevronDown />}</button>

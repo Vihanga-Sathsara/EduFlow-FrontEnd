@@ -165,14 +165,14 @@ export default function LearningPath(){
             <main className="relative flex flex-col items-center w-full mt-[100px] mb-10 gap-6">
                 <section className="relative flex w-full flex-col justify-center items-center gap-6">
                     <div className="w-[90%] p-2 lg:p-6 sm:p-2 space-y-3 text-center">
-                        <p className="bg-linear-to-br from-[#2c3e5c] to-[#4a6fa5] bg-clip-text p-4 text-transparent lg:text-6xl sm:text-3xl text-xl font-bold">Learning Path Generator</p>
+                        <p className="bg-linear-to-r from-blue-900 to-blue-500 bg-clip-text text-transparent p-4 lg:text-6xl sm:text-3xl text-xl font-bold">Learning Path Generator</p>
                         <p className="text-black lg:text-center sm:text-center lg:text-2xl sm:text-xl text-[12px] font-bold lg:pt-10 sm:pt-7 pt-2">Enter any subject and get a complete, personalized learning path generated instantly with AI-powered recommendations.</p>
                     </div>
                     <div className="flex flex-col w-[90%] gap-6 h-[20%] bg-gray-100 rounded-lg p-4">
                         <p className="font-bold text-xl">Generate Learning Path</p>
                         <div className="flex lg:flex-row sm:flex-row flex-col w-full gap-4">
                             <input type="text" className="border border-gray-400 lg:w-[75%] sm:w-[75%] w-full rounded-md p-2 h-[45px]" value={prompt} onChange={(e) => setPrompt(e.target.value)}/>
-                            <button  className="bg-linear-to-br from-[#2c3e5c] to-[#4a6fa5] lg:w-[25%] sm:w-[25%]  w-full text-white font-bold rounded-md text-base h-[45px]" onClick={handleResult}>Generate</button>
+                            <button  className="bg-linear-to-r from-blue-900 to-blue-500 lg:w-[25%] sm:w-[25%]  w-full text-white font-bold rounded-md text-base h-[45px]" onClick={handleResult}>Generate</button>
                         </div>
                         <div className="p-2 border-l-4 border-l-blue-700">
                             <p className="lg:text-sm sm:text-sm text-[12px]"><span className="text-blue-900 font-bold">Example:</span> Python Programming, UX Design, Blockchain Technology, Digital Photography, Machine Learning Fundamentals</p>
@@ -473,12 +473,9 @@ export default function LearningPath(){
                 </section>
             </main>
             <footer className="w-full mt-auto">
-                <section>
-                    <div className="w-full h-[100px] flex flex-col justify-center items-center">
-                        <p className="text-black font-bold">© 2025 EduFlow LearnHub. All rights reserved.</p>
-                        <p>Powered by AI technology. Generated learning paths are personalized recommendations and should be adapted to your specific learning style and pace.</p>
-                    </div>
-                </section>
+                <div className="mt-10 pt-4 text-center text-gray-500 mb-10">
+                    © 2026 EduFlow LearnHub. All rights reserved.
+                </div>
             </footer>
         </div>
     )

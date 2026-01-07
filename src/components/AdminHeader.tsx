@@ -144,12 +144,12 @@ export default function IndexHeader(){
    
     return (
         <div className="w-full flex flex-col items-center relative">
-            <header className={`inline-flex justify-between h-[70px] items-center lg:pl-17 lg:pr-17 sm:pl-17 sm:pr-17 pl-7 pr-7 fixed z-10 ${hideOnScroll ? "w-[80%] bg-blue-500/50 backdrop-blur-md rounded-4xl flex justify-center items-center top-1" : "shadow-sm  bg-gray-100  w-full top-0"} transition-shadow duration-300`}>
+            <header className={`inline-flex justify-between h-[70px] items-center lg:pl-17 lg:pr-17 sm:pl-17 sm:pr-17 pl-7 pr-7 fixed z-10 ${hideOnScroll ? "w-[80%] bg-gray-500/20 backdrop-blur-md rounded-4xl flex justify-center items-center top-1" : "shadow-sm w-full top-0"} transition-shadow duration-300`}>
                 <div className={`${hideOnScroll ? "hidden" : ""}`}>
                     <p className="lg:text-2xl sm:text-xl text-base font-bold text-[#4E6BFF]">EduFlow LearnHub</p>
                 </div>
                 <div className={`space-x-4 text-lg sm:hidden lg:flex hidden ${hideOnScroll ? "w-full flex items-center justify-center" : ""}`} >
-                    <Link to="/user-dashboard">Dashboard</Link>
+                    <Link to="/admin-dashboard">Dashboard</Link>
                     <Link to="/learning-path">Learning Path</Link>
                     <Link to="#">E-Library</Link>
                     <Link to="#">FAQ</Link>
@@ -165,7 +165,7 @@ export default function IndexHeader(){
             {showDropdown && (
                 <div className="fixed top-[70px] right-10 bg-white border border-gray-300 rounded-md shadow-md w-48 z-20">
                     <ul>
-                        <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer"><Link to="/user-dashboard">Dashboard</Link></li>
+                        <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer"><Link to="/admin-dashboard">Dashboard</Link></li>
                         <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer"> <Link to="/learning-path">Learning Path</Link></li>
                         <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer"><Link to="#">E-Library</Link></li>
                         <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer"> <Link to="#">FAQ</Link></li>

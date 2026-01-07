@@ -5,7 +5,7 @@ import { FaBook, FaCloudUploadAlt, FaFileAlt, FaFilePdf, FaUsers } from "react-i
 import { useEffect, useRef, useState } from "react"
 import { getAllUsers } from "../services/auth"
 import { getAllLearningPaths } from "../services/learningpath"
-import { getAllEbooks, uploadEbookFile } from "../services/econtent"
+import { getAllEbooks, uploadEbookFile, deleteEcontent } from "../services/econtent"
 import { saveAs } from "file-saver"
 import AdminHeader from "../components/AdminHeader"
 
@@ -23,6 +23,9 @@ export default function AdminDashboard(){
     const categories = ["Programming", "Design", "Business", "Science", "Art", "History", "Mathematics", "Literature"]
     const elibraryRef =  useRef<HTMLDivElement | null>(null)
     const [height, setHeight] = useState<number | null>(null)
+    const [userSearch,setUserSearch] = useState("")
+    const [isTrueUser,setIsTruUser] = useState(false)
+     const [userDetails,setUserDetails] = useState("")
     
 
     useEffect(() => {
@@ -89,6 +92,7 @@ export default function AdminDashboard(){
                 text: "Ebook uploaded successfully",
                 draggable: true
             })
+            window.location.reload()
         }catch (error: any) {
             Swal.fire({
                 icon: "error",
@@ -141,7 +145,43 @@ export default function AdminDashboard(){
 
     const admins = users.filter(user =>user.role.includes("ADMIN"))
 
+    function setFindSearch (userSearch){
+        if(userSearch === "" || !userSearch){
+            Swal.fire({
+                icon: "error",
+                text: "Please enter valid email to find user.",
+                draggable: true
+            })
+            return
+        }
+        const searchUser = users.filter(user => user.email.includes(userSearch))
+        setIsTruUser(true)
+        setUserDetails(searchUser[0])
+        console.log(searchUser[0])
+        
+    }
+    
+    const deleteBook = async (e: React.FormEvent<HTMLButtonElement>) =>{
+        e.preventDefault()
+        try{
+            const res = await deleteEcontent(_id)
+             Swal.fire({
+                icon: "success",
+                text: res.message || "OTP verified successfully!",
+                draggable: true
+            })
+            setEbooks(prev => prev.filter(book => book._id !== _id))
+        }catch(error:any){
+            console.error("Failed Ebook Delete:", error)
 
+            Swal.fire({
+                icon: "error",
+                text: error.response?.data?.message || "Failed Ebook Delete!",
+                draggable: true
+            })
+        }
+    }
+  
 
     return(
         <div className="w-full flex flex-col bg-blue-50 min-h-screen">
@@ -154,7 +194,7 @@ export default function AdminDashboard(){
                     </div>
                 </section>
 
-                <section className="grid lg:grid-cols-2 sm:grid-cols-1 grid-cols-1 gap-6 w-[90%]">
+                <section className="grid lg:grid-cols-3 sm:grid-cols-1 grid-cols-1 gap-6 w-[90%]">
                     <div className="bg-white pl-5 pr-5 pt-10 pb-10 rounded-lg shadow-md border-t-5 border-blue-500 hover:shadow-lg hover:transform-3d hover:scale-105 transition-all duration-300">
                         <div className="flex gap-7 pl-12">
                             <div className="flex items-center bg-blue-100 p-3 rounded-lg">
@@ -237,9 +277,9 @@ export default function AdminDashboard(){
                             </div>
                             <button className="w-[40%] bg-blue-700 pt-2 pb-2 rounded-lg text-white font-bold" onClick={handleEbookUpload}>Upload</button>
                         </div>
-                        <div className="mt-4 lg:w-[40%] sm:w-full w-full flex flex-col gap-4 bg-white p-4 rounded-lg shadow-sm" style={{ height: height ? `${height}px` : 'auto' }}>
+                        <div className="mt-4 lg:w-[40%] sm:w-full w-full flex flex-col gap-4 bg-white p-4 rounded-lg shadow-sm"  style={{ height: height ? `${height}px` : 'auto' }}>
                             <p className="lg:text-xl sm:text-lg text-base font-bold text-blue-700">Recently Uploaded</p>
-                            <div className="h-full overflow-y-auto max-h-[40vh]">
+                            <div className="h-full overflow-y-auto flex flex-col gap-4">
                                 {ebooks.slice(0,5).map((ebook, index) => (
                                     <div key={index} className="shadow-sm rounded-lg p-4 bg-gray-100">
                                        <div className="flex items-center gap-2 mb-2 bg-white py-4 px-5 rounded-lg">
@@ -247,11 +287,11 @@ export default function AdminDashboard(){
                                             <span className="font-semibold">{ebook.title}</span>
                                         </div>
                                         <div className="mb-2">
-                                            <p className="text-sm text-gray-600">{ebook.description}</p>
+                                            <p className="text-sm text-gray-600">Description: {ebook.description}</p>
                                         </div>
-                                        <p className="text-sm text-gray-600">by {ebook.author} <span className="text-gray-600 ml-4">category: {ebook.category}</span></p>
+                                        <p className="text-sm text-gray-600">Author: {ebook.author} <span className="text-gray-600 ml-4">Category: {ebook.category}</span></p>
                                         <div className="flex gap-4 mt-2">
-                                            <button className="bg-red-600 px-4 py-1 rounded-lg text-white font-bold">Delete</button>
+                                            <button className="bg-red-600 px-4 py-1 rounded-lg text-white font-bold" onClick={()=>deleteEcontent(ebook._id)}>Delete</button>
                                             <PdfDownloadWithSaver secureUrl={ebook.fileUrl} />
                                         </div>
                                     </div>
@@ -261,8 +301,16 @@ export default function AdminDashboard(){
                     </div>
                 </section>
                 <section className="w-[90%]  bg-white p-5 rounded-lg shadow-md">
-                 <p className="lg:text-2xl sm:text-xl text-base font-bold">Manage Users</p>
-                    <div className="h-full overflow-y-auto max-h-[50vh] mt-4">
+                    <div className="w-full flex lg:flex-row lg:justify-between sm:flex-col flex-col sm:gap-4 gap-3">
+                        <p className="lg:text-xl sm:text-lg text-base font-bold text-blue-700">Manage Users</p>
+                        <div className="flex justify-between gap-3">
+                            <input type="text" placeholder="🔍 Enter email for search user..." value={userSearch} onChange={(e) => setUserSearch(e.target.value)} className="lg:w-full px-12 py-3 rounded-xl border border-gray-300  focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white text-gray-700 relative" />
+                            <button className="bg-gray-100 px-2 rounded-xl" onClick={(e)=> setFindSearch(userSearch)}>🔍</button>
+                        </div>
+                        
+                    </div>  
+
+                    <div className={`h-full overflow-y-auto max-h-[50vh] mt-4 ${isTrueUser ? "hidden" : "block"}`}>
                         <p className="text-lg font-bold text-red-600 mb-2">Admins</p>
                             {admins.length === 0 && (
                             <p className="text-sm text-gray-500">No admins found</p>
@@ -273,10 +321,11 @@ export default function AdminDashboard(){
                                 <p className="text-sm text-gray-600">User ID: {userItem._id}</p>
                                 <p className="text-sm text-gray-600">Role: {userItem.role}</p>
                                 <p className="text-sm text-gray-600">Registered At:{formatDateTime(userItem.registeredDate)} </p>
+                                 <button className="mt-3 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition">Remove</button>
                             </div>
                         ))}
                     </div>
-                    <div className="h-full overflow-y-auto max-h-[50vh] mt-4">
+                    <div className={`h-full overflow-y-auto max-h-[50vh] mt-4 ${isTrueUser ? "hidden" : "block"}`}>
                         <p className="text-lg font-bold text-blue-600 mb-2">Users</p>
                         {normalUsers.length === 0 && (
                             <p className="text-sm text-gray-500">No users found</p>
@@ -287,11 +336,31 @@ export default function AdminDashboard(){
                                 <p className="text-sm text-gray-600">User ID: {userItem._id}</p>
                                 <p className="text-sm text-gray-600">Role: {userItem.role}</p>
                                 <p className="text-sm text-gray-600">Registered At:{formatDateTime(userItem.registeredDate)} </p>
+                                <button className="mt-3 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition">Remove</button>
                             </div>
+                           
                         ))}
                     </div>
+                    {
+                        isTrueUser && userDetails && (
+                            <div className="shadow-sm rounded-lg p-4 bg-gray-100 mb-2">
+                            <p className="font-bold">User Email: {userDetails.email}</p>
+                            <p className="text-sm text-gray-600">User ID: {userDetails._id}</p>
+                            <p className="text-sm text-gray-600">Role: {userDetails.role.join(", ")}</p>
+                            <p className="text-sm text-gray-600">Registered At: {formatDateTime(userDetails.registeredDate)}</p>
+
+                            <button
+                                onClick={() => setIsTruUser(false)}
+                                className="mt-3 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                            >
+                                Close
+                            </button>
+                        </div>
+                        )
+                    }
                 </section>
             </main>
         </div>
+
     )
 }

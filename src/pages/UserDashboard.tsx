@@ -6,7 +6,9 @@ import { getLearningPathProgress, getLearningPaths } from "../services/learningp
 import { useEffect, useState } from "react"
 import LearningPathCard from "../components/LearningPathCard"
 import LearningPathViewer from "../components/LearningPathViewer"
-import { FaBook, FaCheckCircle, FaSpinner } from "react-icons/fa"
+import { FaBook, FaCheckCircle, FaSpinner, FaFilePdf } from "react-icons/fa"
+import {getAllEbooks} from "../services/econtent"
+import { saveAs } from "file-saver"
 
 
 export default function UserDashboard(){
@@ -16,11 +18,14 @@ export default function UserDashboard(){
     const [selectedPath, setSelectedPath] = useState<any>(null)
     const [showOverview, setShowOverview] = useState(false)
     const [completeWeek, setCompleteWeek] = useState<number[]>([])
+    const [ebooks , setEbooks] = useState<any[]>([])
     const userId = user ? user.id : null
+    const [bookSeeAll , setBookSeeAll] = useState(false)
 
     useEffect( () => {
         if (!user?.id) return
         learningPathsDetails(userId)
+        allEbooks()
     }, [userId] )
 
     useEffect(() => {
@@ -57,6 +62,36 @@ export default function UserDashboard(){
             console.error("Error fetching completed weeks:", error)
         }
     }
+
+    const allEbooks = async() =>{
+       try{
+            const res = await getAllEbooks()
+            setEbooks(res.ebooks)
+            console.log(res.ebooks)
+       }catch(error){
+            console.log(error)
+       }
+    }
+
+    const PdfDownloadWithSaver = ({ secureUrl }: { secureUrl: string }) => {
+        const handleDownload = () => {
+            saveAs(secureUrl, 'ebook.pdf')
+        }
+        return (
+            <button onClick={handleDownload} className="bg-green-600 px-4 py-1 rounded-lg text-white font-bold">
+                Download PDF
+            </button>
+        )
+    }
+
+    const groupedEbooks = Array.isArray(ebooks) ? ebooks.reduce((acc: any, ebook: any) => {
+        const category = ebook.category || "Others"
+        if (!acc[category]) {
+            acc[category] = []
+        }
+        acc[category].push(ebook)
+        return acc
+    }, {}): {}
 
     const completedCount = learnDetail ? learnDetail.learningPaths.filter((path: any) => path.status === true).length : 0
     const inProgressCount = learnDetail ? learnDetail.learningPaths.filter((path: any) => path.status === false).length : 0
@@ -107,7 +142,7 @@ export default function UserDashboard(){
                     </div>
                 </section>
                 <section className="w-[90%] flex lg:flex-row sm:flex-col flex-col gap-6 mt-6 mb-6 justify-center items-center">
-                    <div className={`${cardSeeAll ? "lg:w-full" : "lg:w-[55%]"} sm:w-full w-full bg-white p-5 rounded-lg shadow-md`}>
+                    <div className={`${cardSeeAll ? "lg:w-full" : "lg:w-[55%]"} ${bookSeeAll ? "lg:hidden" : "lg:w-[55%]"} sm:w-full w-full bg-white p-5 rounded-lg shadow-md`}>
                         <div className="flex justify-between mb-5">
                             <p className="lg:text-2xl font-bold">Personalized Learning Path</p>
                             <p className="text-blue-500" onClick={() => setCardSeeAll(!cardSeeAll)}>{cardSeeAll ? "View Less" : "View All"}</p>
@@ -122,10 +157,69 @@ export default function UserDashboard(){
                             }
                         </div>
                     </div>
-                     <div className={`sm:w-full ${cardSeeAll ? "hidden" : "block lg:w-[45%]"} w-full bg-white p-5 rounded-lg shadow-md`}>
+                    <div className={`${cardSeeAll ? "lg:hidden" : "lg:w-[45%]"} ${bookSeeAll ? "lg:w-full" : "lg:w-[45%]"} sm:w-full w-full bg-white p-5 rounded-lg shadow-md`}>
                         <div className="flex justify-between">
                             <p>Smart E-Library</p>
-                            <p className="text-blue-500"><a href="">Browse All</a></p>
+                            <p className="text-blue-500" onClick={() => setBookSeeAll(!bookSeeAll)}>{bookSeeAll ? "View Less" : "browse All"}</p>  
+                        </div>
+                        <div>
+                            {
+                                Array.isArray(ebooks) ? (
+                                <div className={`${bookSeeAll ? "grid lg:grid-cols-2 sm:grid-cols-1 grid-cols-1 gap-4" : "flex flex-col gap-4"}`}>
+                                    {
+                                        Object.keys(groupedEbooks).map((category) => {
+                                            const visibleEbooks = bookSeeAll ? groupedEbooks[category] : groupedEbooks[category].slice(0, 2)
+
+                                            return (
+                                                <div key={category} className="flex flex-col gap-4">
+
+                                                  
+                                                    <p className="text-xl font-bold text-blue-700">
+                                                    {category}
+                                                    </p>
+
+                                                    
+                                                    {visibleEbooks.map((ebook, index) => (
+                                                    <div
+                                                        key={index}
+                                                        className="shadow-sm rounded-lg p-4 bg-gray-100"
+                                                    >
+                                                        <div className="flex items-center gap-2 mb-2 bg-white py-4 px-5 rounded-lg">
+                                                        <FaFilePdf className="text-red-600 text-2xl" />
+                                                        <span className="font-semibold">{ebook.title}</span>
+                                                        </div>
+
+                                                        <p className="text-sm text-gray-600 mb-2">
+                                                        {ebook.description}
+                                                        </p>
+
+                                                        <p className="text-sm text-gray-600">
+                                                        by {ebook.author}
+                                                        <span className="ml-4 text-gray-500">
+                                                            category: {ebook.category}
+                                                        </span>
+                                                        </p>
+
+                                                        <div className="flex gap-4 mt-2">
+                                                        <PdfDownloadWithSaver secureUrl={ebook.fileUrl} />
+                                                        </div>
+                                                    </div>
+                                                    ))}
+
+                                                    {!bookSeeAll && groupedEbooks[category].length > 2 && (
+                                                    <p className="text-sm text-blue-600 cursor-pointer hover:underline">
+                                                        + {groupedEbooks[category].length - 2} more ebooks
+                                                    </p>
+                                                    )}
+
+                                                </div>
+                                            )}
+                                        )}
+                                    
+                                </div>) : (
+                                    <FaSpinner className="text-5xl text-blue-500 animate-spin" style={{ animationDuration: "2s" }}/>
+                                )
+                            }
                         </div>
                     </div>
                 </section>
