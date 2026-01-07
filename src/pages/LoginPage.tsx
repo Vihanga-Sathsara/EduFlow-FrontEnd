@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom"
 import { useAuth } from "../context/AuthContext"
 import { GoogleLogin } from "@react-oauth/google"
 import { jwtDecode } from "jwt-decode"
+import { AiOutlineHome } from "react-icons/ai"
 
 export default function Login(){
 
@@ -26,6 +27,8 @@ export default function Login(){
     const [otpToken, setOtpToken] = useState("")
     const navigate = useNavigate()
     const { setUser } = useAuth()
+
+    const isSmall = window.innerWidth <= 500
 
    
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -296,9 +299,13 @@ export default function Login(){
         setConfirmPassword("")
     }
 
+    const navigateLandinPage = () => {
+        navigate("/")
+    }
+
     return( 
-        <section className="h-screen w-full sm:flex sm:flex-col lg:flex lg:flex-row flex flex-col items-center justify-center">
-            <div className="h-[80%] w-[45%] bg-gray-100 lg:flex lg:items-center lg:justify-center lg:gap-4 lg:border rounded-l-lg lg:border-r-0 sm:hidden hidden">
+        <section className="h-screen w-full sm:flex sm:flex-col lg:flex lg:flex-row flex flex-col items-center justify-center bg-white">
+            <div className="h-[80%] w-[45%] lg:flex lg:items-center lg:justify-center lg:gap-4 rounded-l-lg sm:hidden hidden">
                 <div className="h-full flex flex-col items-center gap-4">
                     <div className="h-[50%] w-full">
                         <Spline scene="https://prod.spline.design/EWw6hIqN0oFvDjPP/scene.splinecode" />
@@ -310,9 +317,13 @@ export default function Login(){
                     </div>
                 </div>
             </div>
-            <div className="h-[80%] lg:w-[45%] sm:w-[80%] w-[90%] flex flex-col items-center justify-center gap-7 border sm:rounded-lg rounded-lg lg:rounded-l-none lg:border-l-0">
-                <div className="lg:text-start sm:text-center text-center">
-                    <p className="lg:text-2xl font-bold sm:text-xl text-xl text-blue-500">Sign In to your account</p>
+            <div className="lg:h-[90%] sm:h-[90%] h-[90%]  lg:w-[45%] sm:w-[80%] w-[90%] flex flex-col items-center lg:justify-evenly sm:justify-center justify-center lg:shadow-lg lg:bg-gray-200 lg:rounded-lg">
+                <div className="w-full flex lg:justify-start sm:justify-center justify-center pl-7">
+                    <button className="bg-blue-100 p-3 rounded-full hover:bg-blue-400 hover:text-white" onClick={navigateLandinPage}><AiOutlineHome className="text-2xl"/></button>
+                </div>
+                <p className={`lg:hidden sm:block block font-bold text-blue-700 ${isSmall ? "text-2xl" : "text-5xl"}`}>EduFlow LearnHub</p>
+                <div className="lg:text-start sm:text-center text-center lg:p-0 sm:p-4 p-4 mb-3">
+                    <p className={`font-bold text-blue-500 ${isSmall ? "text-lg" : "text-2xl"}`}>Sign In to your account</p>
                     <p className="text-base">Enter your credentials to continue learning</p>
                 </div>
                 <div className="w-full flex flex-col items-center justify-center gap-7">

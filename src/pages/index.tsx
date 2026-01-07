@@ -1,42 +1,51 @@
 import { useEffect, useState } from "react"
-import { FaBars } from "react-icons/fa"
+import { FaBars, FaRegCheckCircle, FaRegEdit, FaRegLightbulb, FaRocket, FaShieldAlt, FaLaptopCode, FaFacebookF, FaTwitter, FaLinkedinIn, FaGithub } from "react-icons/fa"
 import { Link } from "react-router-dom"
+import { HiOutlineMap,HiOutlineCalendar, HiOutlineAcademicCap, HiOutlineChartBar,HiOutlineBookOpen, HiOutlineDocumentText } from "react-icons/hi"
+import { useNavigate } from "react-router-dom"
 
 export default function Index(){
     // const [showBurgerButton, setShowBurgerButton] = useState(false)
 
     const [hideOnScroll, setHideOnScroll] = useState(false)
+    const isTooSmall = window.innerWidth <= 344
+    const navigate = useNavigate()
+    const navigateRegisterPage = () => {
+        navigate("/register")
+    }
 
   useEffect(() => {
     const handleScroll = () => {
-        const isLargeScreen = window.innerWidth >= 1024;
-        const isMediumScreen = window.innerWidth >= 768;
-
+        const isLargeScreen = window.innerWidth >= 1024
+        const isMediumScreen = window.innerWidth >= 768
         if (isLargeScreen || isMediumScreen) { 
-            setHideOnScroll(window.scrollY > 50);  
+            setHideOnScroll(window.scrollY > 50)
         }else {
-            setHideOnScroll(false);
+            setHideOnScroll(false)
         }
     };
 
+    
+
     window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll)
     }, [])
+
      return (
-        <div className="w-full flex flex-col items-center relative">
+        <div className="w-full flex flex-col">
             <header className={`inline-flex justify-between w-full h-[70px] items-center lg:pl-17 lg:pr-17 sm:pl-17 sm:pr-17 pl-7 pr-7 fixed z-10 top-0 ${hideOnScroll ? "flex items-center justify-center" : ""}`}>
                 <div className={`${hideOnScroll ? "hidden" : "flex"}`}>
-                    <p className="lg:text-2xl sm:text-xl text-base font-bold text-[#4E6BFF]">EduFlow LearnHub</p>
+                    <p className="lg:text-2xl sm:text-xl text-base font-bold text-[#2563EB] flex items-center">EduFlow LearnHub</p>
                 </div>
-                <div className={`space-x-4 text-lg  py-2 px-4 rounded-lg shadow-lg sm:hidden lg:flex hidden  bg-gray-400/10 backdrop-blur-md lg:${hideOnScroll ? "flex items-center justify-center" : ""}`}>
+                <div className={`space-x-4 text-lg py-2 px-4 rounded-lg shadow-lg sm:hidden lg:flex hidden  bg-gray-400/10 backdrop-blur-md lg:${hideOnScroll ? "flex items-center justify-center" : ""}`}>
                     <Link to="#">Features</Link>
                     <Link to="#">How It Works</Link>
                     <Link to="#">Benefits</Link>
                     <Link to="#">Contact</Link>
                 </div>
                 <div className={`space-x-4 text-lg lg:block sm:hidden hidden lg:${hideOnScroll ? "hidden" : "flex"}`}>
-                    <Link to="/login">Login</Link>
-                    <Link to="/register">Register</Link>
+                    <Link to="/login" className="text-blue-600 px-6 py-2 font-base rounded-xl border bg-white">Login</Link>
+                    <Link to="/register" className="text-white px-6 py-2 font-base rounded-xl border bg-blue-600 animate">Register</Link>
                 </div>
                 <div className="lg:hidden sm:block block">
                     <button className="text-xl">
@@ -44,39 +53,168 @@ export default function Index(){
                     </button>
                 </div>
             </header>
-            <main className="relative flex flex-col items-center">
-                <section className="relative flex bg-blue-100 h-screen w-full flex-col justify-center items-center ">
-                   
-                    <div className="w-[95%] h-[95%] flex flex-col justify-center gap-7 p-17 items-center">
-                        <div className="w-[70%] p-4 ">
-                            <p className="text-[37px] font-bold text-center">Personalized Learning Paths and Smart e-Library in One Powerful Platform.</p>
-                            <p className="text-xl text-gray-600 text-center">
+            <main className="flex flex-col items-center">
+                <section className="flex bg-white mt-[100px] w-full flex-col items-center">
+                    <div className="w-[95%] h-[95%] flex flex-col justify-center items-center">
+                        <div className="lg:w-[70%] sm:w-[90%] lg:p-4 sm:p-4 p-5  w-full flex flex-col gap-7">
+                            <p className="lg:text-8xl sm:text-7xl text-4xl font-bold text-center bg-linear-to-r from-blue-900 to-blue-500 bg-clip-text text-transparent">Transform Your Learning Experience with EduFlow</p>
+                            <p className={`lg:text-xl sm:text-lg text-lg text-center text-gray-500 font-medium ${isTooSmall ? "text-sm" : ""}`}>
                                 EduFlow LearnHub combines personalized learning paths with a smart e-library to 
                                 create a comprehensive learning ecosystem. Organize your resources, track your 
                                 progress, and achieve your learning goals faster.
                             </p>
-                            <button className="px-4 py-2 mr-4 text-white bg-blue-500 rounded-lg">Get Started</button>
-                            <button className="px-4 py-2 mr-4 text-white bg-blue-500 rounded-lg">Learn More</button>
-                        </div>
-                        <div>
-
+                            <div className="w-full flex flex-row justify-center gap-7">
+                                <button className={ `text-blue-700 px-6 py-3 font-medium rounded-xl border border-blue-500/30 hover:shadow-md shadow-blue-100 hover:scale-105 transition-all ${isTooSmall ? "text-sm px-3 py-2" : ""}` } onClick= {navigateRegisterPage}>Join For Free</button>
+                                <button className={` text-blue-700 px-6 py-3 font-medium rounded-xl border border-blue-500/30 hover:shadow-md shadow-blue-100 hover:scale-105 transition-all ${isTooSmall ? "text-sm px-3 py-2" : ""}`}>Learn More</button>
+                            </div>
+                           
                         </div>
                         
                     </div>
-                    {/* <div className="w-1/2 h-full flex justify-center items-center z-1"> */}
-                            {/* <Spline scene="https://prod.spline.design/SPZmHL1kIYZNGIyS/scene.splinecode" /> */}
-                            {/* <Spline scene="https://prod.spline.design/4FNrQRKtRHpj6DPu/scene.splinecode" /> */}
-                            {/* <Spline scene=" https://prod.spline.design/iecCXR3ZcjIdcXfY/scene.splinecode" /> */}
-                            {/* <Spline scene=" https://prod.spline.design/EWw6hIqN0oFvDjPP/scene.splinecode" /> */}
-                     
-                            {/* <img src="/landingpage_vector.png" alt="" className="w-full h-[75%]"/> */}
-
-                    {/* </div> */}
                 </section>
-                <section className="h-screen w-full relative flex">
-                   
+                <section className="w-full relative flex">
+                   <div>
+                        <img src="/images/hero-image.png" alt="Hero Image" className="w-full h-auto"/>
+                   </div>
                 </section>
+                <section className="w-full relative mt-10">
+                    <p className="text-4xl font-bold text-gray-800 text-center mb-4">Our Core Features</p>
+                    <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 p-7 gap-5 lg:w-[80%] sm:w-[90%] w-full mx-auto">
+                        <div className="p-7 rounded-2xl bg-gray-50 shadow-md hover:shadow-xl transition">
+                            <HiOutlineMap className="text-4xl text-blue-700 mb-4"/>
+                            <p className="text-xl font-semibold mb-2">AI-Generated Learning Roadmaps</p>
+                            <p className="text-gray-600">Generate a personalized learning roadmap based on your goals, skill level, and timeline fully AI powered.</p>
+                        </div>
+                        <div className="p-7 rounded-2xl bg-gray-50 shadow-md hover:shadow-xl transition">
+                            <HiOutlineCalendar className="text-4xl text-blue-700 mb-4"/>
+                            <p className="text-xl font-semibold mb-2">Weekly Learning Plans</p>
+                            <p className="text-gray-600">Your roadmap is automatically broken into weekly learning tasks with clear objectives and milestones.</p>
+                        </div>
+                        <div className="p-7 rounded-2xl bg-gray-50 shadow-md hover:shadow-xl transition">
+                            <HiOutlineDocumentText className="text-4xl text-blue-700 mb-4"/>
+                            <p className="text-xl font-semibold mb-2">Auto-Generated Weekly Notes</p>
+                            <p className="text-gray-600">Get AI-generated notes for every week, tailored to your learning path — no manual searching required.</p>
+                        </div>
+                        <div className="p-7 rounded-2xl bg-gray-50 shadow-md hover:shadow-xl transition">
+                            <HiOutlineAcademicCap className="text-4xl text-blue-700 mb-4"/>
+                            <p className="text-xl font-semibold mb-2">AI Quiz & Answer Generation</p>
+                            <p className="text-gray-600">Practice smarter with AI-generated quizzes and answers aligned with your weekly topics to reinforce understanding.</p>
+                        </div>
+                        <div className="p-7 rounded-2xl bg-gray-50 shadow-md hover:shadow-xl transition">
+                            <HiOutlineChartBar className="text-4xl text-blue-700 mb-4"/>
+                            <p className="text-xl font-semibold mb-2">Progress Tracking & Insights</p>
+                            <p className="text-gray-600">Track completed weeks and overall learning progress through a clear and intuitive dashboard.</p>
+                        </div>
+                        <div className="p-7 rounded-2xl bg-gray-50 shadow-md hover:shadow-xl transition">
+                            <HiOutlineBookOpen className="text-4xl text-blue-700 mb-4"/>
+                            <p className="text-xl font-semibold mb-2">Smart E-Library Integration</p>
+                            <p className="text-gray-600">Access a curated collection of resources and materials that complement your learning path, all in one place.</p>
+                        </div>
+                    </div>
+                </section>
+                <section className="w-full relative mt-10">
+                    <p className="text-4xl font-bold text-gray-800 text-center mb-4">How It Works</p>
+                    <div className="grid lg:grid-cols-3 sm:grid-cols-1 grid-cols-1 p-7 gap-5 lg:w-[80%] sm:w-[90%] w-full mx-auto">
+                        <div className="bg-gray-50 p-6 rounded-2xl shadow-md hover:shadow-xl transition transform hover:-translate-y-2 hover:scale-105 duration-300">
+                            <div className="p-4 rounded-full bg-blue-100 w-fit mb-4">
+                                <FaRegLightbulb className="text-2xl text-blue-700"/>
+                            </div>
+                            <p className="text-xl font-semibold mb-2">1. Create Your Learning Path</p>
+                            <p className="text-gray-600">Select your subjects, goals, and pace. Our system generates a personalized roadmap for you.</p>
+                        </div>
+                        <div className="bg-gray-50 p-6 rounded-2xl shadow-md hover:shadow-xl transition transform hover:-translate-y-2 hover:scale-105 duration-300">
+                            <div className="p-4 rounded-full bg-purple-100 w-fit mb-4">
+                                <FaRegEdit className="text-2xl text-purple-700"/>
+                            </div>
+                            <p className="text-xl font-semibold mb-2">2. Access Weekly Notes & Quizzes</p>
+                            <p className="text-gray-600">AI-generated notes and quizzes are linked to each week, helping you revise and test your knowledge.</p>
+                        </div>
+                        <div className="bg-gray-50 p-6 rounded-2xl shadow-md hover:shadow-xl transition transform hover:-translate-y-2 hover:scale-105 duration-300">
+                            <div className="p-4 rounded-full bg-green-100 w-fit mb-4">
+                                <FaRegCheckCircle className="text-2xl text-green-700"/>
+                            </div>
+                            <p className="text-xl font-semibold mb-2">3. Track Your Progress</p>
+                            <p className="text-gray-600">Visualize your weekly progress and milestones with our smart analytics dashboard.</p>
+                        </div>
+                    </div>
+                </section>
+                <section className="w-full relative mt-10">
+                    <p className="text-4xl font-bold text-gray-800 text-center mb-4">Benefits</p>
+                    <div className="grid lg:grid-cols-3 sm:grid-cols-1 grid-cols-1 p-7 gap-5 lg:w-[80%] sm:w-[90%] w-full mx-auto">
+                        <div className="p-7 rounded-2xl bg-gray-50 shadow-md hover:shadow-xl transition hover:-translate-y-2 duration-500">
+                            <div className="p-4 rounded-full bg-blue-100 w-fit mb-4">
+                                <FaRocket className="text-2xl text-blue-700"/>
+                            </div>
+                            <p className="text-xl font-semibold mb-2">Personalized Learning</p>
+                            <p className="text-gray-600">AI-powered learning paths tailored to your pace and goals.</p>
+                        </div>
+                        <div className="p-7 rounded-2xl bg-gray-50 shadow-md hover:shadow-xl transition hover:-translate-y-2 duration-500">
+                            <div className="p-4 rounded-full bg-purple-100 w-fit mb-4">
+                                <FaShieldAlt className="text-2xl text-purple-700"/>
+                            </div>
+                            <p className="text-xl font-semibold mb-2">Secure & Reliable</p>
+                            <p className="text-gray-600">Your data and progress are safely stored in the cloud.</p>
+                        </div>
+                        <div className="p-7 rounded-2xl bg-gray-50 shadow-md hover:shadow-xl transition hover:-translate-y-2 duration-500">
+                            <div className="p-4 rounded-full bg-green-100 w-fit mb-4">
+                                <FaLaptopCode className="text-2xl text-green-700"/>
+                            </div>
+                            <p className="text-xl font-semibold mb-2">Accessible Anywhere</p>
+                            <p className="text-gray-600">Use on desktop, tablet, or mobile for uninterrupted learning.</p>
+                        </div>
+                    </div>
+                </section> 
+                <section className="w-full relative mt-10 items-center flex flex-col">
+                    <div className="px-6 lg:w-[80%] sm:w-[90%] w-full lg:py-10 sm:py-6 py-6">
+                        <p className="text-4xl font-bold text-gray-800 text-center mb-4">Get in Touch</p>
+                        <div className="w-full bg-gray-50 p-6 rounded-lg shadow-md">
+                            <p className="text-gray-600 mb-8 text-base font-semibold">Have questions or feedback? We’d love to hear from you!</p>
+                            <form className="flex flex-col gap-4">
+                                <input type="text" placeholder="Your Name" className="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                                <input type="email" placeholder="Your Email" className="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                                <textarea placeholder="Your Message" className="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                                <button type="submit" className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition">Send Message</button>
+                            </form>
+                        </div>   
+                    </div>
+                </section>     
             </main>
+            <footer className="bg-gray-900 text-white py-10">
+                    <div className="max-w-6xl mx-auto px-6 flex flex-col lg:flex-row justify-between items-start gap-10">
+                    
+                        <div className="flex flex-col gap-4">
+                            <h1 className="text-2xl font-bold text-blue-500">EduFlow LearnHub</h1>
+                            <p className="text-gray-400 max-w-xs">
+                                Transform your learning experience with personalized paths, e-library, and progress tracking.
+                            </p>
+                            <div className="flex gap-4 mt-2">
+                                <a href="#"><FaFacebookF className="hover:text-blue-500 transition"/></a>
+                                <a href="#"><FaTwitter className="hover:text-blue-400 transition"/></a>
+                                <a href="#"><FaLinkedinIn className="hover:text-blue-600 transition"/></a>
+                                <a href="#"><FaGithub className="hover:text-gray-400 transition"/></a>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                            <h3 className="font-bold text-lg mb-2">Quick Links</h3>
+                            <a href="#features" className="hover:text-blue-500 transition">Features</a>
+                            <a href="#how-it-works" className="hover:text-blue-500 transition">How It Works</a>
+                            <a href="#benefits" className="hover:text-blue-500 transition">Benefits</a>
+                            <a href="#contact" className="hover:text-blue-500 transition">Contact</a>
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                            <h3 className="font-bold text-lg mb-2">Contact</h3>
+                            <p className="text-gray-400">support@eduflow.com</p>
+                            <p className="text-gray-400">+94 77 123 4567</p>
+                            <p className="text-gray-400">Colombo, Sri Lanka</p>
+                        </div>
+                    </div>
+
+                    <div className="border-t border-gray-700 mt-10 pt-4 text-center text-gray-500">
+                        © 2026 EduFlow LearnHub. All rights reserved.
+                    </div>
+             </footer>
         </div>
      )
 }
