@@ -156,7 +156,7 @@ export default function Register(){
     }
  
     return( 
-        <section className="h-screen sm:flex sm:flex-col lg:flex lg:flex-row flex flex-col items-center justify-center bg-white">
+        <section className="h-screen w-full sm:flex sm:flex-col lg:flex lg:flex-row flex flex-col items-center justify-center bg-white">
             <div className="h-[80%] w-[45%] lg:flex lg:items-center lg:justify-center lg:gap-4 rounded-l-lg sm:hidden hidden">
                 <div className="h-full flex flex-col items-center gap-4">
                     <div className="h-[50%] w-full">
@@ -169,44 +169,47 @@ export default function Register(){
                     </div>
                 </div>
             </div>
-            <div className="lg:h-[90%] sm:h-[90%] h-[90%]  lg:w-[45%] sm:w-[80%] w-[90%] flex flex-col items-center lg:justify-evenly sm:justify-center justify-center lg:shadow-lg lg:bg-gray-200 lg:rounded-lg">
-                <div className="w-full flex lg:justify-start sm:justify-center justify-center lg:pl-7">
-                    <button className="bg-blue-100 p-3 rounded-full hover:bg-blue-400 hover:text-white" onClick={navigateLandinPage}><AiOutlineHome className="text-2xl"/></button>
-                </div>
-                <p className={`lg:hidden sm:block block font-bold text-blue-700 ${isSmall ? "text-2xl" : "text-5xl"}`}>EduFlow LearnHub</p>
-                <div className="lg:text-start sm:text-center text-center">
-                    <p className="lg:text-2xl sm:text-xl text-xl font-bold text-blue-500">Create your account</p>
-                    <p className="text-base">Join the future of personalized learning</p>
-                </div>
-                <div className="relative w-[75%] flex flex-col justify-center">
-                    <input type="email" name="email" id="email" value={email} placeholder=" " onChange={(e) => setEmail(e.target.value)} className="peer border-b px-8 py-2 focus:outline-none"/>
-                    <MdEmail className="absolute text-gray-500 text-xl pointer-events-none" />
-                    <label htmlFor="email" className={`absolute px-8 py-2 peer-focus:-top-5 ${email ? "-top-5 text-sm text-blue-500" : ""} peer-placeholder-shown:text-base peer-focus:text-blue-500 peer-focus:text-sm`}>email</label>
-                </div>
+            <div className="w-full flex flex-col items-center justify-center gap-7">
+                <div className="lg:h-[90%] sm:h-[90%] h-[90%]  lg:w-[45%] sm:w-[80%] w-[90%] flex flex-col items-center lg:justify-evenly sm:justify-center justify-center lg:shadow-lg lg:bg-gray-200 lg:rounded-lg gap-7">
+                    <div className="w-full flex lg:justify-start sm:justify-center justify-center lg:pl-7">
+                        <button className="bg-blue-100 p-3 rounded-full hover:bg-blue-400 hover:text-white" onClick={navigateLandinPage}><AiOutlineHome className="text-2xl"/></button>
+                    </div>
+                    <p className={`lg:hidden sm:block block font-bold text-blue-700 ${isSmall ? "text-2xl" : "text-5xl"}`}>EduFlow LearnHub</p>
+                    <div className="lg:text-start sm:text-center text-center">
+                        <p className="lg:text-2xl sm:text-xl text-xl font-bold text-blue-500">Create your account</p>
+                        <p className="text-base">Join the future of personalized learning</p>
+                    </div>
+                    <div className="relative w-[75%] flex flex-col justify-center">
+                        <input type="email" name="email" id="email" value={email} placeholder=" " onChange={(e) => setEmail(e.target.value)} className="peer border-b px-8 py-2 focus:outline-none"/>
+                        <MdEmail className="absolute text-gray-500 text-xl pointer-events-none" />
+                        <label htmlFor="email" className={`absolute px-8 py-2 peer-focus:-top-5 ${email ? "-top-5 text-sm text-blue-500" : ""} peer-placeholder-shown:text-base peer-focus:text-blue-500 peer-focus:text-sm`}>email</label>
+                    </div>
 
-                <div className="relative w-[75%] flex flex-col justify-center">
-                    <input type= {showPassword ? "text" : "password"} name="password" id="password" value={password} placeholder=" " onChange={(e) => setPassword(e.target.value)} className="peer border-b px-8 py-2 focus:outline-none" />
-                    <RiLockPasswordLine className="absolute text-gray-500 text-xl pointer-events-none" />
-                    <label htmlFor="password" className={`absolute px-8 py-2 peer-focus:-top-5 ${password ? "-top-5 text-sm text-blue-500" : ""} peer-placeholder-shown:text-base peer-focus:text-blue-500 peer-focus:text-sm`}>password</label>
-                    <button type="button" className="absolute right-2 text-gray-500" onClick={() => setShowPassword(!showPassword)}>{ showPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}</button>
+                    <div className="relative w-[75%] flex flex-col justify-center">
+                        <input type= {showPassword ? "text" : "password"} name="password" id="password" value={password} placeholder=" " onChange={(e) => setPassword(e.target.value)} className="peer border-b px-8 py-2 focus:outline-none" />
+                        <RiLockPasswordLine className="absolute text-gray-500 text-xl pointer-events-none" />
+                        <label htmlFor="password" className={`absolute px-8 py-2 peer-focus:-top-5 ${password ? "-top-5 text-sm text-blue-500" : ""} peer-placeholder-shown:text-base peer-focus:text-blue-500 peer-focus:text-sm`}>password</label>
+                        <button type="button" className="absolute right-2 text-gray-500" onClick={() => setShowPassword(!showPassword)}>{ showPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}</button>
+                    </div>
+                    <div className="relative w-[75%] flex flex-col justify-center ">
+                        <input type= {showConfirmPassword ? "text" : "password"} name="confirmPassword" id="confirmPassword" placeholder=" " onChange={(e) => setConfirmPassword(e.target.value)} className="peer border-b px-8 py-2 focus:outline-none" />
+                        <RiLockPasswordLine className="absolute text-gray-500 text-xl pointer-events-none" />
+                        <label htmlFor="confirmPassword" className={`absolute px-8 py-2 peer-focus:-top-5 ${confirmPassword ? "-top-5 text-sm text-blue-500" : ""} peer-placeholder-shown:text-base peer-focus:text-blue-500 peer-focus:text-sm`} >confirm password</label>
+                        <button type="button" className="absolute right-2 text-gray-500" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>{ showConfirmPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}</button>
+                    </div>
+                    <div className="relative flex flex-row items-center w-[75%]">
+                        <input type="checkbox" className="lg:w-4 lg:h-4 sm:w-3 sm:h-3 w-3 h-3" onChange={(e) => setIsChecked(e.target.checked)} />
+                        <label className="ml-2 lg:text-base sm:text-sm text-sm">I agree to the Terms and Conditions</label>
+                    </div>
+                    <button className="bg-blue-500 text-white px-4 py-2 rounded-lg w-[75%]" onClick={ handleRegister }>Register</button>
+                    <p>or continue with</p>
+                    <GoogleLogin
+                        onSuccess={handleGoogleRegister}
+                        containerProps={{ className: "w-[75%]" }}
+                    />    
                 </div>
-                <div className="relative w-[75%] flex flex-col justify-center ">
-                    <input type= {showConfirmPassword ? "text" : "password"} name="confirmPassword" id="confirmPassword" placeholder=" " onChange={(e) => setConfirmPassword(e.target.value)} className="peer border-b px-8 py-2 focus:outline-none" />
-                    <RiLockPasswordLine className="absolute text-gray-500 text-xl pointer-events-none" />
-                    <label htmlFor="confirmPassword" className={`absolute px-8 py-2 peer-focus:-top-5 ${confirmPassword ? "-top-5 text-sm text-blue-500" : ""} peer-placeholder-shown:text-base peer-focus:text-blue-500 peer-focus:text-sm`} >confirm password</label>
-                    <button type="button" className="absolute right-2 text-gray-500" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>{ showConfirmPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}</button>
-                </div>
-                <div className="relative flex flex-row items-center w-[75%]">
-                    <input type="checkbox" className="lg:w-4 lg:h-4 sm:w-3 sm:h-3 w-3 h-3" onChange={(e) => setIsChecked(e.target.checked)} />
-                    <label className="ml-2 lg:text-base sm:text-sm text-sm">I agree to the Terms and Conditions</label>
-                </div>
-                <button className="bg-blue-500 text-white px-4 py-2 rounded-lg w-[75%]" onClick={ handleRegister }>Register</button>
-                <p>or continue with</p>
-                <GoogleLogin
-                    onSuccess={handleGoogleRegister}
-                    containerProps={{ className: "w-[75%]" }}
-                />    
             </div>
+           
             
         </section>
     )
