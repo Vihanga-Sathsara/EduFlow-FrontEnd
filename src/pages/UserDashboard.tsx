@@ -179,7 +179,7 @@ export default function UserDashboard(){
                                                     </p>
 
                                                     
-                                                    {visibleEbooks.map((ebook, index) => (
+                                                    {visibleEbooks.map((ebook:any, index:number) => (
                                                     <div
                                                         key={index}
                                                         className="shadow-sm rounded-lg p-4 bg-gray-100"

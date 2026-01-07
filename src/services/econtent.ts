@@ -16,6 +16,6 @@ export const getAllEbooks = async () => {
 }
 
 export const deleteEcontent = async(_id :string) =>{
-    const res = await api.delete("/ebook/delete-ebook",{_id})
+    const res = await api.delete("/ebook/delete-ebook",{data:{_id}})
     return res.data
 }

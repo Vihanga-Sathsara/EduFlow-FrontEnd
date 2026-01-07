@@ -25,7 +25,7 @@ export default function AdminDashboard(){
     const [height, setHeight] = useState<number | null>(null)
     const [userSearch,setUserSearch] = useState("")
     const [isTrueUser,setIsTruUser] = useState(false)
-     const [userDetails,setUserDetails] = useState("")
+    const [userDetails, setUserDetails] = useState<User | null>(null)
     
 
     useEffect(() => {
@@ -145,7 +145,7 @@ export default function AdminDashboard(){
 
     const admins = users.filter(user =>user.role.includes("ADMIN"))
 
-    function setFindSearch (userSearch){
+    function setFindSearch (userSearch:string){
         if(userSearch === "" || !userSearch){
             Swal.fire({
                 icon: "error",
@@ -164,13 +164,13 @@ export default function AdminDashboard(){
     const deleteBook = async (e: React.FormEvent<HTMLButtonElement>) =>{
         e.preventDefault()
         try{
-            const res = await deleteEcontent(_id)
+            const res = await deleteEcontent(ebook._id)
              Swal.fire({
                 icon: "success",
                 text: res.message || "OTP verified successfully!",
                 draggable: true
             })
-            setEbooks(prev => prev.filter(book => book._id !== _id))
+            setEbooks(prev => prev.filter(book => book._id !== ebook._id))
         }catch(error:any){
             console.error("Failed Ebook Delete:", error)
 
@@ -291,7 +291,7 @@ export default function AdminDashboard(){
                                         </div>
                                         <p className="text-sm text-gray-600">Author: {ebook.author} <span className="text-gray-600 ml-4">Category: {ebook.category}</span></p>
                                         <div className="flex gap-4 mt-2">
-                                            <button className="bg-red-600 px-4 py-1 rounded-lg text-white font-bold" onClick={()=>deleteEcontent(ebook._id)}>Delete</button>
+                                            <button className="bg-red-600 px-4 py-1 rounded-lg text-white font-bold" onClick={()=>deleteBook(ebook._id)}>Delete</button>
                                             <PdfDownloadWithSaver secureUrl={ebook.fileUrl} />
                                         </div>
                                     </div>
@@ -305,7 +305,7 @@ export default function AdminDashboard(){
                         <p className="lg:text-xl sm:text-lg text-base font-bold text-blue-700">Manage Users</p>
                         <div className="flex justify-between gap-3">
                             <input type="text" placeholder="🔍 Enter email for search user..." value={userSearch} onChange={(e) => setUserSearch(e.target.value)} className="lg:w-full px-12 py-3 rounded-xl border border-gray-300  focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white text-gray-700 relative" />
-                            <button className="bg-gray-100 px-2 rounded-xl" onClick={(e)=> setFindSearch(userSearch)}>🔍</button>
+                            <button className="bg-gray-100 px-2 rounded-xl" onClick={()=> setFindSearch(userSearch)}>🔍</button>
                         </div>
                         
                     </div>  
