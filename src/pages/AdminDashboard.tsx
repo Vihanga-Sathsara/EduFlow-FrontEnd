@@ -170,7 +170,6 @@ export default function AdminDashboard(){
     }
     
     const deleteBook = async (ebookId:string) =>{
-        e.preventDefault()
         try{
             const res = await deleteEcontent(ebookId)
              Swal.fire({
