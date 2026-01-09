@@ -11,7 +11,7 @@ EduFlow Frontend is built with **React + Vite + TypeScript**, providing a smooth
 ## Live Demo
 
 Frontend deployed on **Vercel**:  
-[https://your-frontend-url.vercel.app](https://your-frontend-url.vercel.app)
+[https://edu-flow-front-end.vercel.app](https://edu-flow-front-end.vercel.app)
 
 ---
 

@@ -152,7 +152,6 @@ export default function IndexHeader(){
                     <Link to="/user-dashboard">Dashboard</Link>
                     <Link to="/learning-path">Learning Path</Link>
                     <Link to="#">E-Library</Link>
-                    <Link to="#">FAQ</Link>
                 </div>
                 <div className={`space-x-4 text-lg flex items-center ${hideOnScroll ? "hidden" : ""}`}>
                      <div className={`rounded-full w-[50px] h-[50px] cursor-pointer ${profileColor} items-center justify-center lg:flex sm:flex hidden`} onClick={() => alert("Profile Clicked")}>

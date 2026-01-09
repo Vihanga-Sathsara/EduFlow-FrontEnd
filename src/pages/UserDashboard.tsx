@@ -101,7 +101,7 @@ export default function UserDashboard(){
             <Header />
             <main className="relative flex flex-col items-center w-full mt-[100px] mb-10 gap-7">
                 <section className="w-[90%]">
-                    <p className="text-black lg:text-4xl sm:text-3xl text-sm font-bold">Welcome back,<span className="pl-2">{user?.email}</span> </p>
+                    <p className="bg-linear-to-r from-blue-900 to-blue-500 bg-clip-text text-transparent mt-4 lg:text-4xl sm:text-3xl text-sm font-bold">Welcome back,<span className="pl-2">{user?.email}</span> </p>
                     <p className="text-gray-600 lg:text-2xl sm:text-xl text-[12px] lg:pt-2 sm:pt-2 pt-1 mb-2">Continue your learning journey with personalized recommendations</p>
                     <div className="bg-white lg:w-[45%] sm:[70%] w-full flex items-center justify-center p-4 mt-6 rounded-lg shadow-lg">
                          <DashboardDateTime />
@@ -143,7 +143,7 @@ export default function UserDashboard(){
                     </div>
                 </section>
                 <section className="w-[90%] flex lg:flex-row sm:flex-col flex-col gap-6 mt-6 mb-6 justify-center items-center">
-                    <div className={`${cardSeeAll ? "lg:w-full" : "lg:w-[55%]"} ${bookSeeAll ? "lg:hidden" : "lg:w-[55%]"} sm:w-full w-full bg-white p-5 rounded-lg shadow-md`}>
+                    <div className={`${cardSeeAll ? "lg:w-full h-auto" : "lg:w-[55%] max-h-80"} ${bookSeeAll ? "lg:hidden" : ""} sm:w-full w-full bg-white p-5 rounded-lg shadow-md`}>
                         <div className="flex justify-between mb-5">
                             <p className="lg:text-2xl font-bold">Personalized Learning Path</p>
                             <p className="text-blue-500" onClick={() => setCardSeeAll(!cardSeeAll)}>{cardSeeAll ? "View Less" : "View All"}</p>
@@ -158,68 +158,89 @@ export default function UserDashboard(){
                             }
                         </div>
                     </div>
-                    <div className={`${cardSeeAll ? "lg:hidden" : "lg:w-[45%]"} ${bookSeeAll ? "lg:w-full" : "lg:w-[45%]"} sm:w-full w-full bg-white p-5 rounded-lg shadow-md`}>
+                    <div className={`${cardSeeAll ? "lg:hidden" : ""} ${bookSeeAll ? "lg:w-full h-auto" : "lg:w-[45%] max-h-80 overflow-y-auto"} sm:w-full w-full bg-white p-5 rounded-lg shadow-md`}>
                         <div className="flex justify-between">
-                            <p>Smart E-Library</p>
+                            <p className="lg:text-2xl font-bold">Smart E-Library</p>
                             <p className="text-blue-500" onClick={() => setBookSeeAll(!bookSeeAll)}>{bookSeeAll ? "View Less" : "browse All"}</p>  
                         </div>
                         <div>
+
                             {
-                                Array.isArray(ebooks) ? (
-                                <div className={`${bookSeeAll ? "grid lg:grid-cols-2 sm:grid-cols-1 grid-cols-1 gap-4" : "flex flex-col gap-4"}`}>
-                                    {
-                                        Object.keys(groupedEbooks).map((category) => {
-                                            const visibleEbooks = bookSeeAll ? groupedEbooks[category] : groupedEbooks[category].slice(0, 2)
+                               bookSeeAll ? ( 
+                                    Array.isArray(ebooks) ? (
+                                    <div className={`${bookSeeAll ? "grid lg:grid-cols-2 sm:grid-cols-1 grid-cols-1 overflow-y-scroll gap-7 mt-10" : "flex flex-col gap-4"}`}>
+                                        {
+                                            Object.keys(groupedEbooks).map((category) => {
+                                                const visibleEbooks = bookSeeAll ? groupedEbooks[category] : groupedEbooks[category].slice(0, 2)
 
-                                            return (
-                                                <div key={category} className="flex flex-col gap-4 max-h-[100px] overfloy-y-scroll">
-
-                                                  
-                                                    <p className="text-xl font-bold text-blue-700">
-                                                    {category}
-                                                    </p>
+                                                return (
+                                                    <div key={category} className="flex flex-col gap-4">
 
                                                     
-                                                    {visibleEbooks.map((ebook:any, index:number) => (
-                                                    <div
-                                                        key={index}
-                                                        className="shadow-sm rounded-lg p-4 bg-gray-100 "
-                                                    >
-                                                        <div className="flex items-center gap-2 mb-2 bg-white py-4 px-5 rounded-lg">
-                                                        <FaFilePdf className="text-red-600 text-2xl" />
-                                                        <span className="font-semibold">{ebook.title}</span>
-                                                        </div>
-
-                                                        <p className="text-sm text-gray-600 mb-2">
-                                                        {ebook.description}
+                                                        <p className="text-xl font-bold text-blue-700">
+                                                        {category}
                                                         </p>
 
-                                                        <p className="text-sm text-gray-600">
-                                                        by {ebook.author}
+                                                        
+                                                        {visibleEbooks.map((ebook:any, index:number) => (
+                                                        <div key={index} className="shadow-sm rounded-lg p-4 bg-gray-100 ">
+
+                                                            <div className="flex items-center gap-2 mb-2 bg-white py-4 px-5 rounded-lg">
+                                                                <FaFilePdf className="text-red-600 text-2xl" />
+                                                                <span className="font-semibold">{ebook.title}</span>
+                                                            </div>
+
+                                                            <p className="text-sm text-gray-600 mb-2">{ebook.description}</p>
+
+                                                            <p className="text-sm text-gray-600">by {ebook.author}
+                                                                <span className="ml-4 text-gray-500">
+                                                                    category: {ebook.category}
+                                                                </span>
+                                                            </p>
+
+                                                            <div className="flex gap-4 mt-2">
+                                                                <PdfDownloadWithSaver secureUrl={ebook.fileUrl} />
+                                                            </div>
+                                                        </div>
+                                                        ))}
+
+
+                                                    </div>
+                                                )}
+                                            )
+                                            
+                                        }
+                                        
+                                    </div>) : (
+                                        <FaSpinner className="text-5xl text-blue-500 animate-spin" style={{ animationDuration: "2s" }}/>
+                                    )
+                            ): (
+                                <div>
+                                    {
+                                        Array.isArray(ebooks) ? (
+                                            ebooks.slice(0,4).map((ebook:any, index:number) => (
+                                                <div key={index} className="shadow-sm rounded-lg p-4 bg-gray-100 mt-5">
+                                                    <div className="flex items-center gap-2 mb-2 bg-white py-4 px-5 rounded-lg">
+                                                        <FaFilePdf className="text-red-600 text-2xl" />
+                                                        <span className="font-semibold">{ebook.title}</span>
+                                                    </div>
+                                                    <p className="text-sm text-gray-600 mb-2">{ebook.description}</p>
+                                                    <p className="text-sm text-gray-600">by {ebook.author}
                                                         <span className="ml-4 text-gray-500">
                                                             category: {ebook.category}
                                                         </span>
-                                                        </p>
-
-                                                        <div className="flex gap-4 mt-2">
-                                                        <PdfDownloadWithSaver secureUrl={ebook.fileUrl} />
-                                                        </div>
-                                                    </div>
-                                                    ))}
-
-                                                    {!bookSeeAll && groupedEbooks[category].length > 2 && (
-                                                    <p className="text-sm text-blue-600 cursor-pointer hover:underline">
-                                                        + {groupedEbooks[category].length - 2} more ebooks
                                                     </p>
-                                                    )}
-
+                                                    <div className="flex gap-4 mt-2">
+                                                        <PdfDownloadWithSaver secureUrl={ebook.fileUrl} />
+                                                    </div>
                                                 </div>
-                                            )}
-                                        )}
-                                    
-                                </div>) : (
-                                    <FaSpinner className="text-5xl text-blue-500 animate-spin" style={{ animationDuration: "2s" }}/>
-                                )
+                                            ))
+                                        ) : (
+                                            <FaSpinner className="text-5xl text-blue-500 animate-spin" style={{ animationDuration: "2s" }}/>
+                                        )
+                                    }
+                                </div>
+                            )
                             }
                         </div>
                     </div>
