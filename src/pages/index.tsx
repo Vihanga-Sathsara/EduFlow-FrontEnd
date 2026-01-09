@@ -1,15 +1,19 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState,useRef } from "react"
 import { FaBars, FaRegCheckCircle, FaRegEdit, FaRegLightbulb, FaRocket, FaShieldAlt, FaLaptopCode, FaFacebookF, FaTwitter, FaLinkedinIn, FaGithub } from "react-icons/fa"
 import { Link } from "react-router-dom"
 import { HiOutlineMap,HiOutlineCalendar, HiOutlineAcademicCap, HiOutlineChartBar,HiOutlineBookOpen, HiOutlineDocumentText } from "react-icons/hi"
 import { useNavigate } from "react-router-dom"
 
 export default function Index(){
-    // const [showBurgerButton, setShowBurgerButton] = useState(false)
-
+    const featureRef = useRef<HTMLDivElement>(null)
+    const worksRef = useRef<HTMLDivElement>(null)
+    const benifitsRef = useRef<HTMLDivElement>(null)
+    const contactRef = useRef<HTMLDivElement>(null)
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [hideOnScroll, setHideOnScroll] = useState(false)
     const isTooSmall = window.innerWidth <= 344
     const navigate = useNavigate()
+
     const navigateRegisterPage = () => {
         navigate("/register")
     }
@@ -25,11 +29,13 @@ export default function Index(){
         }
     };
 
-    
-
     window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll)
     }, [])
+
+    const scrollTo = (ref: React.RefObject<HTMLDivElement>) => {
+        ref.current?.scrollIntoView({ behavior: "smooth" })
+    }
 
      return (
         <div className="w-full flex flex-col">
@@ -38,19 +44,35 @@ export default function Index(){
                     <p className="lg:text-2xl sm:text-xl text-base font-bold text-[#2563EB] flex items-center">EduFlow LearnHub</p>
                 </div>
                 <div className={`space-x-4 text-lg py-2 px-4 rounded-lg shadow-lg sm:hidden lg:flex hidden  bg-gray-400/10 backdrop-blur-md lg:${hideOnScroll ? "flex items-center justify-center" : ""}`}>
-                    <Link to="#">Features</Link>
-                    <Link to="#">How It Works</Link>
-                    <Link to="#">Benefits</Link>
-                    <Link to="#">Contact</Link>
+                    <button onClick={() => scrollTo(featureRef)}>Features</button>
+                    <button onClick={() => scrollTo(worksRef)}>How It Works</button>
+                    <button onClick={() => scrollTo(benifitsRef)}>Benefits</button>
+                    <button onClick={() => scrollTo(contactRef)}>Contact</button>
                 </div>
                 <div className={`space-x-4 text-lg lg:block sm:hidden hidden lg:${hideOnScroll ? "hidden" : "flex"}`}>
                     <Link to="/login" className="text-blue-600 px-6 py-2 font-base rounded-xl border bg-white">Login</Link>
                     <Link to="/register" className="text-white px-6 py-2 font-base rounded-xl border bg-blue-600 animate">Register</Link>
                 </div>
-                <div className="lg:hidden sm:block block">
-                    <button className="text-xl">
+                <div className="lg:hidden sm:block block right-8 absolute">
+                    <button className="text-xl" onClick={()=>setIsMenuOpen(true)}>
                         <FaBars />
                     </button>
+                    {
+                        isMenuOpen && (
+                            
+                            <div className="fixed sm:top-[50px] top-[50px] sm:right-20 right-10 bg-white border border-gray-300 rounded-md shadow-md sm:w-50 w-40 z-30 p-5" onClick={() => setIsMenuOpen(false)}>
+                                <ul>
+                                    <li onClick={() => scrollTo(featureRef)}>Features</li>
+                                    <li onClick={() => scrollTo(worksRef)}>How It Works</li>
+                                    <li onClick={() => scrollTo(benifitsRef)}>Benefits</li>
+                                    <li onClick={() => scrollTo(contactRef)}>Contact</li>
+                                    <li><a href="/login">Login</a></li>
+                                    <li><a href="/register">Register</a></li>
+                                </ul>
+                                                         
+                            </div>
+                        )
+                    }
                 </div>
             </header>
             <main className="flex flex-col items-center">
@@ -72,12 +94,7 @@ export default function Index(){
                         
                     </div>
                 </section>
-                <section className="w-full relative flex">
-                   <div>
-                        <img src="/images/hero-image.png" alt="Hero Image" className="w-full h-auto"/>
-                   </div>
-                </section>
-                <section className="w-full relative mt-10">
+                <section className="w-full relative mt-10" ref={featureRef}>
                     <p className="text-4xl font-bold text-gray-800 text-center mb-4">Our Core Features</p>
                     <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 p-7 gap-5 lg:w-[80%] sm:w-[90%] w-full mx-auto">
                         <div className="p-7 rounded-2xl bg-gray-50 shadow-md hover:shadow-xl transition">
@@ -112,7 +129,7 @@ export default function Index(){
                         </div>
                     </div>
                 </section>
-                <section className="w-full relative mt-10">
+                <section className="w-full relative mt-10" ref={worksRef}>
                     <p className="text-4xl font-bold text-gray-800 text-center mb-4">How It Works</p>
                     <div className="grid lg:grid-cols-3 sm:grid-cols-1 grid-cols-1 p-7 gap-5 lg:w-[80%] sm:w-[90%] w-full mx-auto">
                         <div className="bg-gray-50 p-6 rounded-2xl shadow-md hover:shadow-xl transition transform hover:-translate-y-2 hover:scale-105 duration-300">
@@ -138,7 +155,7 @@ export default function Index(){
                         </div>
                     </div>
                 </section>
-                <section className="w-full relative mt-10">
+                <section className="w-full relative mt-10" ref={benifitsRef}>
                     <p className="text-4xl font-bold text-gray-800 text-center mb-4">Benefits</p>
                     <div className="grid lg:grid-cols-3 sm:grid-cols-1 grid-cols-1 p-7 gap-5 lg:w-[80%] sm:w-[90%] w-full mx-auto">
                         <div className="p-7 rounded-2xl bg-gray-50 shadow-md hover:shadow-xl transition hover:-translate-y-2 duration-500">
@@ -164,7 +181,7 @@ export default function Index(){
                         </div>
                     </div>
                 </section> 
-                <section className="w-full relative mt-10 items-center flex flex-col">
+                <section className="w-full relative mt-10 items-center flex flex-col" ref={contactRef}>
                     <div className="px-6 lg:w-[80%] sm:w-[90%] w-full lg:py-10 sm:py-6 py-6">
                         <p className="text-4xl font-bold text-gray-800 text-center mb-4">Get in Touch</p>
                         <div className="w-full bg-gray-50 p-6 rounded-lg shadow-md">

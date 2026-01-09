@@ -21,6 +21,7 @@ export default function UserDashboard(){
     const [ebooks , setEbooks] = useState<any[]>([])
     const userId = user ? user.id : null
     const [bookSeeAll , setBookSeeAll] = useState(false)
+    
 
     useEffect( () => {
         if (!user?.id) return
@@ -171,7 +172,7 @@ export default function UserDashboard(){
                                             const visibleEbooks = bookSeeAll ? groupedEbooks[category] : groupedEbooks[category].slice(0, 2)
 
                                             return (
-                                                <div key={category} className="flex flex-col gap-4">
+                                                <div key={category} className="flex flex-col gap-4 max-h-[100px] overfloy-y-scroll">
 
                                                   
                                                     <p className="text-xl font-bold text-blue-700">
@@ -182,7 +183,7 @@ export default function UserDashboard(){
                                                     {visibleEbooks.map((ebook:any, index:number) => (
                                                     <div
                                                         key={index}
-                                                        className="shadow-sm rounded-lg p-4 bg-gray-100"
+                                                        className="shadow-sm rounded-lg p-4 bg-gray-100 "
                                                     >
                                                         <div className="flex items-center gap-2 mb-2 bg-white py-4 px-5 rounded-lg">
                                                         <FaFilePdf className="text-red-600 text-2xl" />

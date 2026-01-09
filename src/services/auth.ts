@@ -5,6 +5,11 @@ export const register = async (email: string, password: string) => {
     return res.data
 }
 
+export const registerAdminUser = async (email: string, password: string) => {
+    const res = await api.post("/auth/admin-register", { email, password })
+    return res.data
+}
+
 export const googleRegister = async (email: string) => {
     const res = await api.post("/auth/google-register", { email })
     return res.data

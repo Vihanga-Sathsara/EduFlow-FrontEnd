@@ -3,11 +3,14 @@ import DashboardDateTime from "../components/DateTime"
 import { useAuth } from "../context/AuthContext"
 import { FaBook, FaCloudUploadAlt, FaFileAlt, FaFilePdf, FaUsers } from "react-icons/fa"
 import { useEffect, useRef, useState } from "react"
-import { getAllUsers } from "../services/auth"
+import { getAllUsers,registerAdminUser } from "../services/auth"
 import { getAllLearningPaths } from "../services/learningpath"
 import { getAllEbooks, uploadEbookFile, deleteEcontent } from "../services/econtent"
 import { saveAs } from "file-saver"
 import AdminHeader from "../components/AdminHeader"
+import { MdEmail } from "react-icons/md"
+import { RiLockPasswordLine } from "react-icons/ri"
+import { AiOutlineEye, AiOutlineEyeInvisible, AiOutlineHome } from "react-icons/ai"
 
 
 export default function AdminDashboard(){
@@ -24,7 +27,31 @@ export default function AdminDashboard(){
     const elibraryRef =  useRef<HTMLDivElement | null>(null)
     const [height, setHeight] = useState<number | null>(null)
     const [userSearch,setUserSearch] = useState("")
-    const [isTrueUser,setIsTruUser] = useState(false)
+    const [isTrueUser,setIsTrueUser] = useState(false)
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [confirmPassword, setConfirmPassword] = useState("")
+    const [showPassword, setShowPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+    const dashboardRef = useRef<HTMLDivElement>(null)
+    const libraryRef = useRef<HTMLDivElement>(null)
+    const usersRef = useRef<HTMLDivElement>(null)
+
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/
+
+    const validatePassword = (password: string) => {
+        return passwordRegex.test(password)
+    }
+
+    const validateEmail = (email: string) => {
+        return emailRegex.test(email)
+    }
+
+    const scrollTo = (ref: React.RefObject<HTMLDivElement>) => {
+        ref.current?.scrollIntoView({ behavior: "smooth" })
+    }
 
 
     interface User {
@@ -100,7 +127,7 @@ export default function AdminDashboard(){
                 text: "Ebook uploaded successfully",
                 draggable: true
             })
-            window.location.reload()
+            setEbooks(prev => [...prev,res.ebook])
         }catch (error: any) {
             Swal.fire({
                 icon: "error",
@@ -163,9 +190,17 @@ export default function AdminDashboard(){
             return
         }
         const searchUser = users.find((user:User )=> user.email.includes(userSearch))
-        setIsTruUser(true)
-        setUserDetails(searchUser[0])
-        console.log(searchUser[0])
+        if(!searchUser){
+           Swal.fire({
+                icon: "error",
+                text: "Can't find user.",
+                draggable: true
+            })
+            return 
+        }
+        setIsTrueUser(true)
+        setUserDetails(searchUser)
+        console.log(searchUser)
         
     }
     
@@ -188,15 +223,92 @@ export default function AdminDashboard(){
             })
         }
     }
-  
+
+    const ebooksByCategory = ebooks.reduce((acc: any, ebook: any) => {
+        if (!acc[ebook.category]) {
+            acc[ebook.category] = []
+        }
+            acc[ebook.category].push(ebook)
+            return acc
+    }, {})
+
+    const handleRegister = async (e: React.FormEvent<HTMLButtonElement>) => {
+
+        e.preventDefault()
+
+         if ( !email || !password || !confirmPassword ) {
+             Swal.fire({
+                icon: "error",
+                text: "Please fill in all fields",
+                draggable: true
+            })
+            return
+        }
+
+        if ( !validateEmail(email) ) {
+            Swal.fire({
+                icon: "error",
+                text: "Please enter a valid email address.",
+                draggable: true
+            })
+            return
+        }
+
+        if ( !validatePassword(password) ) {
+            Swal.fire({
+                icon: "error",
+                text: "Password must contain uppercase, lowercase, number and special character",
+                draggable: true
+            })
+            return
+        }
+
+        if (password !== confirmPassword) {
+            Swal.fire({
+                icon: "error",
+                text: "Passwords do not match!",
+                draggable: true
+            })
+            return
+        }
+    
+
+        try {
+                const res: any = await registerAdminUser (email,password)
+                console.log("Member Added Successfully:", res)
+                Swal.fire({
+                    icon: "success",
+                    text: "Member added successfully!",
+                    draggable: true
+                })
+                setUsers(prev=>[...prev,res.data])
+        } catch (error: any) {
+                console.error("Registration error:", error);
+                if(error.response){
+                    Swal.fire({
+                        icon: "error",
+                        text: error.response.data,
+                        draggable: true
+                    })
+                    return
+                }else{
+                     Swal.fire({
+                        icon: "error",
+                        text: "Registration failed. Please try again.",
+                        draggable: true
+                    })
+                    return
+                }
+        }            
+    }
 
     return(
         <div className="w-full flex flex-col bg-blue-50 min-h-screen">
-            <AdminHeader />
+            <AdminHeader onDashboard={() => scrollTo(dashboardRef)} onLibrary={() => scrollTo(libraryRef)} onUsers={() => scrollTo(usersRef)} />
             <main className="relative flex flex-col items-center w-full mt-[100px] mb-10 gap-7">
-                <section className="w-[90%]">
-                    <p className="text-black lg:text-4xl sm:text-3xl text-sm font-bold">Welcome back,<span className="pl-2">{user?.email}</span> </p>
-                    <div className="bg-white lg:w-[45%] sm:[70%] w-full flex items-center justify-center p-4 mt-6 rounded-lg shadow-lg">
+                <section className="w-[90%]" ref={dashboardRef}>
+                    <p className="bg-linear-to-r from-blue-900 to-blue-500 bg-clip-text text-transparent p-4 lg:text-4xl sm:text-3xl text-sm font-bold">Welcome back,<span className="pl-2">{user?.email}</span> </p>
+                    <div className="bg-white lg:w-[45%] sm:[70%] w-full flex items-center justify-center py-4 mt-6 rounded-lg shadow-lg">
                         <DashboardDateTime />
                     </div>
                 </section>
@@ -236,7 +348,7 @@ export default function AdminDashboard(){
                         </div>
                     </div>
                 </section>
-                <section className="w-[90%] bg-white p-5 rounded-lg shadow-md">
+                <section className="w-[90%] bg-white p-5 rounded-lg shadow-md" ref={libraryRef}>
                     <div className="flex justify-between">
                         <p className="lg:text-2xl sm:text-xl text-base font-bold">E-Library Management</p>
                     </div>
@@ -287,7 +399,7 @@ export default function AdminDashboard(){
                         <div className="mt-4 lg:w-[40%] sm:w-full w-full flex flex-col gap-4 bg-white p-4 rounded-lg shadow-sm"  style={{ height: height ? `${height}px` : 'auto' }}>
                             <p className="lg:text-xl sm:text-lg text-base font-bold text-blue-700">Recently Uploaded</p>
                             <div className="h-full overflow-y-auto flex flex-col gap-4">
-                                {ebooks.slice(0,5).map((ebook, index) => (
+                                {ebooks.slice(-5).reverse().map((ebook, index) => (
                                     <div key={index} className="shadow-sm rounded-lg p-4 bg-gray-100">
                                        <div className="flex items-center gap-2 mb-2 bg-white py-4 px-5 rounded-lg">
                                             <FaFilePdf className="text-red-600 text-2xl" />
@@ -307,7 +419,55 @@ export default function AdminDashboard(){
                         </div>
                     </div>
                 </section>
-                <section className="w-[90%]  bg-white p-5 rounded-lg shadow-md">
+                <section className="w-[90%] bg-white p-5 rounded-lg shadow-md">
+                    <div>
+                        <p className="lg:text-xl sm:text-lg text-base font-bold text-blue-700 mb-10">E-Books</p>
+                    </div>
+                   {
+                        ebooks.length > 0 ? (
+                            <div className="w-full flex flex-col gap-7">
+                                {
+                                    Object.entries(ebooksByCategory).map(([category, books]) => {
+                                    return(    
+                                        
+                                        <div key={category} className="w-full gap-7 bg-gray-50 p-7 rounded-lg shadow-md">
+                                             <p className="mb-10 lg:text-xl sm:text-lg text-base font-bold text-blue-700">{category}</p>
+                                            <div className="grid lg:grid-cols-2 sm:grid-cols-2 grid-cols-1 gap-7">    
+                                            {
+                                                (books as any[]).slice().reverse().map((ebook)=>(
+                                                    
+                                                    <div key={ebook._id} className="shadow-sm rounded-lg p-4 bg-gray-200 mb-10">
+                                                        <div className="flex items-center gap-2 mb-2 bg-white py-4 px-5 rounded-lg">
+                                                            <FaFilePdf className="text-red-600 text-2xl" />
+                                                            <span className="font-semibold">{ebook.title}</span>
+                                                        </div>
+                                                        <div className="mb-2">
+                                                        <p className="text-sm text-gray-600">Description: {ebook.description}</p>
+                                                        </div>
+                                                        <p className="text-sm text-gray-600">Author: {ebook.author} <span className="text-gray-600 ml-4">Category: {ebook.category}</span></p>
+                                                        <div className="flex gap-4 mt-2">
+                                                            <button className="bg-red-600 px-4 py-1 rounded-lg text-white font-bold" onClick={()=>deleteBook(ebook._id)}>Delete</button>
+                                                            <PdfDownloadWithSaver secureUrl={ebook.fileUrl} />
+                                                        </div>
+                                                    </div>
+                                                ))
+                                            }
+                                            </div>
+                                           
+                                        </div>
+                                    )
+                                    
+                                    })
+                                }
+                            
+                            </div>
+                        ):(
+                            <p>No ebooks to show</p>
+                        )
+                    
+                   }
+                </section>
+                <section className="w-[90%]  bg-white p-5 rounded-lg shadow-md" ref={usersRef}>
                     <div className="w-full flex lg:flex-row lg:justify-between sm:flex-col flex-col sm:gap-4 gap-3">
                         <p className="lg:text-xl sm:text-lg text-base font-bold text-blue-700">Manage Users</p>
                         <div className="flex justify-between gap-3">
@@ -317,54 +477,80 @@ export default function AdminDashboard(){
                         
                     </div>  
 
-                    <div className={`h-full overflow-y-auto max-h-[50vh] mt-4 ${isTrueUser ? "hidden" : "block"}`}>
+                    <div className={`mt-4 ${isTrueUser ? "hidden" : "block"}`}>
                         <p className="text-lg font-bold text-red-600 mb-2">Admins</p>
+                        <div className="overflow-y-auto max-h-[50vh]">
                             {admins.length === 0 && (
-                            <p className="text-sm text-gray-500">No admins found</p>
-                        )}
-                        {admins.map((userItem, index) => (
-                            <div key={index} className="shadow-sm rounded-lg p-4 bg-gray-100 mb-2">
-                                <p className="font-bold">User Email: {userItem.email}</p>
-                                <p className="text-sm text-gray-600">User ID: {userItem._id}</p>
-                                <p className="text-sm text-gray-600">Role: {userItem.role}</p>
-                                <p className="text-sm text-gray-600">Registered At:{formatDateTime(userItem.registeredDate)} </p>
-                                 <button className="mt-3 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition">Remove</button>
-                            </div>
-                        ))}
+                                <p className="text-sm text-gray-500">No admins found</p>
+                            )}
+                            {admins.map((userItem, index) => (
+
+                                <div key={index} className="shadow-sm rounded-lg p-4 bg-gray-100 mb-2">
+                                    <p className="font-bold">User Email: {userItem.email}</p>
+                                    <p className="text-sm text-gray-600">User ID: {userItem._id}</p>
+                                    <p className="text-sm text-gray-600">Role: {userItem.role}</p>
+                                    <p className="text-sm text-gray-600">Registered At:{formatDateTime(userItem.registeredDate)} </p>
+                                    <button className="mt-3 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition">Remove</button>
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                    <div className={`h-full overflow-y-auto max-h-[50vh] mt-4 ${isTrueUser ? "hidden" : "block"}`}>
+                    <div className={`mt-4 ${isTrueUser ? "hidden" : "block"}`}>
                         <p className="text-lg font-bold text-blue-600 mb-2">Users</p>
-                        {normalUsers.length === 0 && (
-                            <p className="text-sm text-gray-500">No users found</p>
-                        )}
-                        {normalUsers.map((userItem, index) => (
-                            <div key={index} className="shadow-sm rounded-lg p-4 bg-gray-100 mb-2">
-                                <p className="font-bold">User Email: {userItem.email}</p>
-                                <p className="text-sm text-gray-600">User ID: {userItem._id}</p>
-                                <p className="text-sm text-gray-600">Role: {userItem.role}</p>
-                                <p className="text-sm text-gray-600">Registered At:{formatDateTime(userItem.registeredDate)} </p>
-                                <button className="mt-3 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition">Remove</button>
-                            </div>
-                           
-                        ))}
+                        <div className="overflow-y-auto max-h-[50vh]">
+                            {normalUsers.length === 0 && (
+                                <p className="text-sm text-gray-500">No users found</p>
+                            )}
+                            {normalUsers.map((userItem, index) => (
+                                <div key={index} className="shadow-sm rounded-lg p-4 bg-gray-100 mb-2">
+                                    <p className="font-bold">User Email: {userItem.email}</p>
+                                    <p className="text-sm text-gray-600">User ID: {userItem._id}</p>
+                                    <p className="text-sm text-gray-600">Role: {userItem.role}</p>
+                                    <p className="text-sm text-gray-600">Registered At:{formatDateTime(userItem.registeredDate)} </p>
+                                    <button className="mt-3 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition">Remove</button>
+                                </div>
+                            
+                            ))}
+                        </div>
                     </div>
                     {
                         isTrueUser && userDetails && (
-                            <div className="shadow-sm rounded-lg p-4 bg-gray-100 mb-2">
-                            <p className="font-bold">User Email: {userDetails.email}</p>
-                            <p className="text-sm text-gray-600">User ID: {userDetails._id}</p>
-                            <p className="text-sm text-gray-600">Role: {userDetails.role.join(", ")}</p>
-                            <p className="text-sm text-gray-600">Registered At: {formatDateTime(userDetails.registeredDate)}</p>
+                            <div className="shadow-sm rounded-lg p-4 bg-gray-100 mb-2 mt-5">
+                                <p className="font-bold">User Email: {userDetails.email}</p>
+                                <p className="text-sm text-gray-600">User ID: {userDetails._id}</p>
+                                <p className="text-sm text-gray-600">Role: {userDetails.role.join(", ")}</p>
+                                <p className="text-sm text-gray-600">Registered At: {formatDateTime(userDetails.registeredDate)}</p>
 
-                            <button
-                                onClick={() => setIsTruUser(false)}
-                                className="mt-3 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
-                            >
-                                Close
-                            </button>
-                        </div>
+                                <button onClick={() => setIsTrueUser(false)} className="mt-3 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition">
+                                    Close
+                                </button>
+                            </div>
                         )
                     }
+                </section>
+                <section className="w-[90%]  bg-white p-5 rounded-lg shadow-md">
+                    <p className="lg:text-xl sm:text-lg text-base font-bold text-blue-700">Add Member</p>
+                    <div className="bg-gray-50 w-full flex flex-col items-center justify-center gap-7 mt-10 p-7">
+                        <div className="relative w-[75%] flex flex-col justify-center">
+                            <input type="email" name="email" id="email" value={email} placeholder=" " onChange={(e) => setEmail(e.target.value)} className="peer border-b px-8 py-2 focus:outline-none"/>
+                            <MdEmail className="absolute text-gray-500 text-xl pointer-events-none" />
+                            <label htmlFor="email" className={`absolute px-8 py-2 peer-focus:-top-5 ${email ? "-top-5 text-sm text-blue-500" : ""} peer-placeholder-shown:text-base peer-focus:text-blue-500 peer-focus:text-sm`}>email</label>
+                        </div>
+
+                        <div className="relative w-[75%] flex flex-col justify-center">
+                            <input type= {showPassword ? "text" : "password"} name="password" id="password" value={password} placeholder=" " onChange={(e) => setPassword(e.target.value)} className="peer border-b px-8 py-2 focus:outline-none" />
+                            <RiLockPasswordLine className="absolute text-gray-500 text-xl pointer-events-none" />
+                            <label htmlFor="password" className={`absolute px-8 py-2 peer-focus:-top-5 ${password ? "-top-5 text-sm text-blue-500" : ""} peer-placeholder-shown:text-base peer-focus:text-blue-500 peer-focus:text-sm`}>password</label>
+                            <button type="button" className="absolute right-2 text-gray-500" onClick={() => setShowPassword(!showPassword)}>{ showPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}</button>
+                        </div>
+                        <div className="relative w-[75%] flex flex-col justify-center ">
+                            <input type= {showConfirmPassword ? "text" : "password"} name="confirmPassword" id="confirmPassword" placeholder=" " onChange={(e) => setConfirmPassword(e.target.value)} className="peer border-b px-8 py-2 focus:outline-none" />
+                            <RiLockPasswordLine className="absolute text-gray-500 text-xl pointer-events-none" />
+                            <label htmlFor="confirmPassword" className={`absolute px-8 py-2 peer-focus:-top-5 ${confirmPassword ? "-top-5 text-sm text-blue-500" : ""} peer-placeholder-shown:text-base peer-focus:text-blue-500 peer-focus:text-sm`} >confirm password</label>
+                            <button type="button" className="absolute right-2 text-gray-500" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>{ showConfirmPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}</button>
+                        </div>
+                            <button className="bg-blue-500 text-white px-4 py-2 rounded-lg w-[75%]" onClick={ handleRegister }>Add Member</button>
+                    </div>
                 </section>
             </main>
         </div>

@@ -8,7 +8,7 @@ import Swal from "sweetalert2"
 import { updateProfile } from "../services/auth"
 
 
-export default function IndexHeader(){
+export default function IndexHeader({onDashboard,onLibrary,onUsers}:HeaderProps){
     const {user} = useAuth()
     const [clickProfile , setClickProfile] = useState(false)
     const [newPassword, setNewPassword] = useState("")
@@ -20,6 +20,12 @@ export default function IndexHeader(){
     const [showDropdown, setShowDropdown] = useState(false)
     const [updateLoading, setUpdateLoading] = useState(false)
     const [hideOnScroll, setHideOnScroll] = useState(false)
+
+    interface HeaderProps {
+        onDashboard: () => void
+        onLibrary: () => void
+        onUsers: () => void
+    }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -122,25 +128,6 @@ export default function IndexHeader(){
         }
     }
    
-//    function handleClickOutside(event: MouseEvent) {
-//         const dropdown = document.getElementById("dropdown-menu");
-//         if (dropdown && !dropdown.contains(event.target as Node)) {
-//             setShowDropdown(false)
-//         }
-//     }
-
-//     useEffect(() => {
-//         if (showDropdown) {
-//             document.addEventListener("mousedown", handleClickOutside);
-//         } else {
-//             document.removeEventListener("mousedown", handleClickOutside);
-//         }
-//         return () => {
-//             document.removeEventListener("mousedown", handleClickOutside);
-//         }
-//     }, [showDropdown])
-
-
    
     return (
         <div className="w-full flex flex-col items-center relative">
@@ -148,11 +135,10 @@ export default function IndexHeader(){
                 <div className={`${hideOnScroll ? "hidden" : ""}`}>
                     <p className="lg:text-2xl sm:text-xl text-base font-bold text-[#4E6BFF]">EduFlow LearnHub</p>
                 </div>
-                <div className={`space-x-4 text-lg sm:hidden lg:flex hidden ${hideOnScroll ? "w-full flex items-center justify-center" : ""}`} >
-                    <Link to="/admin-dashboard">Dashboard</Link>
-                    <Link to="/learning-path">Learning Path</Link>
-                    <Link to="#">E-Library</Link>
-                    <Link to="#">FAQ</Link>
+                <div className={`space-x-5 text-lg sm:hidden lg:flex hidden ${hideOnScroll ? "w-full flex items-center justify-center" : ""}`} >
+                    <button onClick={onDashboard}>Dashboard</button>
+                    <button onClick={onLibrary}>E-Library Management</button>
+                    <button onClick={onUsers}>Manage Users</button>
                 </div>
                 <div className={`space-x-4 text-lg flex items-center ${hideOnScroll ? "hidden" : ""}`}>
                      <div className={`rounded-full w-[50px] h-[50px] cursor-pointer ${profileColor} items-center justify-center lg:flex sm:flex hidden`} onClick={() => alert("Profile Clicked")}>
@@ -165,10 +151,9 @@ export default function IndexHeader(){
             {showDropdown && (
                 <div className="fixed top-[70px] right-10 bg-white border border-gray-300 rounded-md shadow-md w-48 z-20">
                     <ul>
-                        <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer"><Link to="/admin-dashboard">Dashboard</Link></li>
-                        <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer"> <Link to="/learning-path">Learning Path</Link></li>
-                        <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer"><Link to="#">E-Library</Link></li>
-                        <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer"> <Link to="#">FAQ</Link></li>
+                        <li onClick={onDashboard} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Dashboard</li>
+                        <li onClick={onLibrary} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Learning Path</li>
+                        <li onClick={onUsers} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Manage Users</li>
                         <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => setClickProfile(!clickProfile)}>Profile</li>
                         <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={logout}>Logout</li>
                     </ul>
