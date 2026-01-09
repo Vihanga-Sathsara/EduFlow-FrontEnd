@@ -305,7 +305,7 @@ export default function AdminDashboard(){
             <AdminHeader onDashboard={() => scrollTo(dashboardRef)} onLibrary={() => scrollTo(libraryRef)} onUsers={() => scrollTo(usersRef)} />
             <main className="relative flex flex-col items-center w-full mt-[100px] mb-10 gap-7">
                 <section className="w-[90%]" ref={dashboardRef}>
-                    <p className="bg-linear-to-r from-blue-900 to-blue-500 bg-clip-text text-transparent mt-4 lg:text-4xl sm:text-3xl text-sm font-bold">Welcome back,<span className="pl-2">{user?.email}</span> </p>
+                    <p className="bg-linear-to-r from-blue-900 to-blue-500 bg-clip-text text-transparent mt-4 py-4 lg:text-4xl sm:text-3xl text-sm font-bold">Welcome back,<span className="pl-2">{user?.email}</span> </p>
                     <div className="bg-white lg:w-[45%] sm:[70%] w-full flex items-center justify-center py-4 mt-6 rounded-lg shadow-lg">
                         <DashboardDateTime />
                     </div>

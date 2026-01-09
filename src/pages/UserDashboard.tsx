@@ -101,7 +101,7 @@ export default function UserDashboard(){
             <Header />
             <main className="relative flex flex-col items-center w-full mt-[100px] mb-10 gap-7">
                 <section className="w-[90%]">
-                    <p className="bg-linear-to-r from-blue-900 to-blue-500 bg-clip-text text-transparent mt-4 lg:text-4xl sm:text-3xl text-sm font-bold">Welcome back,<span className="pl-2">{user?.email}</span> </p>
+                    <p className="bg-linear-to-r from-blue-900 to-blue-500 bg-clip-text text-transparent mt-4 py-4 lg:text-4xl sm:text-3xl text-sm font-bold">Welcome back,<span className="pl-2">{user?.email}</span> </p>
                     <p className="text-gray-600 lg:text-2xl sm:text-xl text-[12px] lg:pt-2 sm:pt-2 pt-1 mb-2">Continue your learning journey with personalized recommendations</p>
                     <div className="bg-white lg:w-[45%] sm:[70%] w-full flex items-center justify-center p-4 mt-6 rounded-lg shadow-lg">
                          <DashboardDateTime />
