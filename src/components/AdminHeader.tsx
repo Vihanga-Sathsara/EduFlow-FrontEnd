@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { FaChevronDown, FaChevronUp } from "react-icons/fa"
 import { useAuth } from "../context/AuthContext"
@@ -7,6 +6,11 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"
 import Swal from "sweetalert2"
 import { updateProfile } from "../services/auth"
 
+interface HeaderProps {
+    onDashboard: () => void
+    onLibrary: () => void
+    onUsers: () => void
+}
 
 export default function IndexHeader({onDashboard,onLibrary,onUsers}:HeaderProps){
     const {user} = useAuth()
@@ -21,11 +25,7 @@ export default function IndexHeader({onDashboard,onLibrary,onUsers}:HeaderProps)
     const [updateLoading, setUpdateLoading] = useState(false)
     const [hideOnScroll, setHideOnScroll] = useState(false)
 
-    interface HeaderProps {
-        onDashboard: () => void
-        onLibrary: () => void
-        onUsers: () => void
-    }
+  
 
   useEffect(() => {
     const handleScroll = () => {
