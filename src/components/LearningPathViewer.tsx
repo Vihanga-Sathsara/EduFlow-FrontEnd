@@ -146,7 +146,7 @@ const LearningPathViewer = ({selectPath, completeWeek, showOverview}: LearningPa
                 
                 <div className="w-full lg:w-[90%] sm:w-full flex flex-row h-[90vh] bg-blue-100 mb-7 lg:sticky top-20 rounded-l-2xl">
 
-                    <div className="w-[20%] flex rounded-l-2xl pt-7 lg:block">
+                    <div className="w-[20%] rounded-l-2xl pt-7 lg:block sm:hidden hidden">
                         <p className="p-5 text-xl font-bold">Navigation</p>
                         <ol className="truncate p-2 space-y-2 text-center">
                             <li><button className="rounded bg-blue-50 w-[80%] p-3 text-start truncate" onClick={() => scrollToSection(overviewRef)}>Overview</button></li>
