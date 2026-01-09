@@ -10,7 +10,7 @@ import { saveAs } from "file-saver"
 import AdminHeader from "../components/AdminHeader"
 import { MdEmail } from "react-icons/md"
 import { RiLockPasswordLine } from "react-icons/ri"
-import { AiOutlineEye, AiOutlineEyeInvisible, AiOutlineHome } from "react-icons/ai"
+import { AiOutlineEye, AiOutlineEyeInvisible} from "react-icons/ai"
 
 
 export default function AdminDashboard(){
@@ -49,7 +49,7 @@ export default function AdminDashboard(){
         return emailRegex.test(email)
     }
 
-    const scrollTo = (ref: React.RefObject<HTMLDivElement>) => {
+    const scrollTo = (ref: React.RefObject<HTMLDivElement  | null>) => {
         ref.current?.scrollIntoView({ behavior: "smooth" })
     }
 
@@ -173,8 +173,6 @@ export default function AdminDashboard(){
             timeZone: "Asia/Colombo",
         })
     }
-
-
 
     const normalUsers = users.filter(user => user.role.includes("USER") && !user.role.includes("ADMIN"))
 
