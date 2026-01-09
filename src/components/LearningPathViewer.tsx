@@ -140,7 +140,7 @@ const LearningPathViewer = ({selectPath, completeWeek, showOverview}: LearningPa
         
             <div className="fixed inset-0 bg-black/80 flex flex-col items-center justify-center h-auto z-50 overflow-y-scroll">
 
-                <div className="w-full flex lg:justify-end justify-center lg:pr-8 mb-3 text-white mt-4">
+                <div className="w-full flex lg:justify-end justify-center lg:pr-8 mb-3 text-white mt-6">
                      <button onClick={() => { showOverview(false); window.location.reload(); }} className="text-red-500 text-lg font-semibold"><FaTimes /></button>
                 </div>
                 
@@ -165,7 +165,7 @@ const LearningPathViewer = ({selectPath, completeWeek, showOverview}: LearningPa
                         </div>
                     </div>
                     
-                    <div className="w-[80%] bg-white rounded-l-2xl p-5 overflow-y-scroll">
+                    <div className="lg:w-[80%] sm:w-full w-full bg-white rounded-l-2xl p-5 overflow-y-scroll">
                         <div className="w-full">
                             <div className="flex items-center justify-between p-5">
                                 <p className="text-xl font-bold">Learning Path Overview</p>
